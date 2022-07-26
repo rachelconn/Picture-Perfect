@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
 import { Camera as ExpoCamera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import ShutterButton from './ShutterButton';
 import SettingButton, { AdjustableCameraSetting }  from './SettingButton/SettingButton';
-import { CameraSetting } from '../../redux/cameraSettings';
+import { CameraSetting, captureImage } from '../../redux/cameraSettings';
 import Camera from './Camera';
 import { CameraPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
+import NavigationContext from '../common/NavigationStack/NavigationContext';
 
 const CameraPage: React.FC = () => {
   const navigation = useNavigation<CameraPageNavigationProp>();
   const [hasCameraPermission, setHasCameraPermission] = React.useState<Boolean>();
+  const { setImageURI } = useContext(NavigationContext);
 
   React.useEffect(() => {
     (async () => {
@@ -34,6 +36,13 @@ const CameraPage: React.FC = () => {
     <SettingButton setting={setting} key={setting} />
   ));
 
+  const onShutterPress = () => {
+    captureImage().then((imageURI) => {
+      setImageURI(imageURI);
+      navigation.navigate('Evaluation');
+    });
+  };
+
   if (hasCameraPermission === undefined) return <View style={styles.background} />;
   else if (hasCameraPermission === false) return <Text>Camera permission denied.</Text>;
   return (
@@ -44,7 +53,7 @@ const CameraPage: React.FC = () => {
       </View>
       <Camera style={styles.cameraContainer} />
       <View style={styles.shutterButtonContainer}>
-        <ShutterButton onPress={() => navigation.navigate('Evaluation')} />
+        <ShutterButton onPress={onShutterPress} />
       </View>
     </View>
   );
