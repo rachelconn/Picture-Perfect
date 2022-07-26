@@ -13,6 +13,7 @@ export const getAvailableISOValues: () => Promise<[number, number]> = CameraModu
 export const getAvailableExposureTimes: () => Promise<[number, number]> = CameraModule.getAvailableExposureTimes;
 export const getAvailableFocusDistances: () => Promise<[number, number]> = CameraModule.getAvailableFocusDistances;
 export const getAvailableZoomValues: () => Promise<[number, number]> = CameraModule.getAvailableZoomValues;
+export const captureImage: () => Promise<string> = CameraModule.captureImage;
 
 export enum CameraSetting {
   AutoFocus = 'autoFocus',

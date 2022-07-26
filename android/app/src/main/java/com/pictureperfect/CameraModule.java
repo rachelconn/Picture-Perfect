@@ -153,4 +153,9 @@ public class CameraModule extends ReactContextBaseJavaModule {
 			CaptureRequest.SENSOR_EXPOSURE_TIME, Math.min(newValue.longValue(), 100000000)
 		));
 	}
+
+	@ReactMethod
+	public void captureImage(final Promise promise) {
+		cameraViewManager.getCameraViewInstance().captureImage(promise);
+	}
 }
