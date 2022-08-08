@@ -31,6 +31,7 @@ import com.facebook.react.bridge.Promise;
 import com.pictureperfect.HandlerExecutor;
 import com.pictureperfect.CameraUtils;
 
+// TODO: rotate image to match device orientation
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	CameraManager cameraManager;
@@ -187,9 +188,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				byte[] bytes = new byte[buffer.capacity()];
 				buffer.get(bytes);
 
-				StringBuilder base64EncodedImage = new StringBuilder("data:image/jpg;base64,");
-				base64EncodedImage.append(Base64.encodeToString(bytes, Base64.DEFAULT));
-				promise.resolve(base64EncodedImage.toString());
+				// StringBuilder base64EncodedImage = new StringBuilder("data:image/jpeg;base64,");
+				// base64EncodedImage.append(Base64.encodeToString(bytes, Base64.DEFAULT));
+				promise.resolve(Base64.encodeToString(bytes, Base64.URL_SAFE));
 
 				// Close resources
 				captureRequestBuilder.removeTarget(imageReader.getSurface());
