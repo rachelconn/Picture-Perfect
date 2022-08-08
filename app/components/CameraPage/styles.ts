@@ -2,9 +2,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 // TODO: need to calculate this on each render rather than statically here
 const windowSize = Dimensions.get('window');
-// Lock to 16:9 aspect ratio and center vertically
+// Lock to 4:3 aspect ratio and center vertically
 const cameraWidth = windowSize.width;
-const cameraHeight = cameraWidth * 16 / 9;
+const cameraHeight = cameraWidth * 4 / 3;
 
 const shutterButtonInnerRadius = windowSize.width * 0.15;
 const shutterButtonOuterRadius = shutterButtonInnerRadius + windowSize.width * 0.01;
