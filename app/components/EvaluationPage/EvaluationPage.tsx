@@ -1,12 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { Appbar, useTheme } from 'react-native-paper';
+import '../../models/models';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import { EvaluationPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import EvaluationCard, { EvaluationCriteria } from './EvaluationCard';
 import styles from './styles';
+
+type PhotoEvaluation = Record<EvaluationCriteria, number>;
 
 interface EvaluationPageProps {
   evaluationCriteria?: EvaluationCriteria[],
@@ -16,11 +19,23 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
   const { imageURI } = React.useContext(NavigationContext);
   const theme = useTheme();
   const navigation = useNavigation<EvaluationPageNavigationProp>();
+  const [evaluation, setEvaluation] = React.useState<PhotoEvaluation>();
+
+  // Get photo evaluation when URI is updated
+  React.useEffect(() => {
+    fetch('192.168.0.191:8000/eval', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({'image': imageURI}),
+    })
+    .then((res) => res.json())
+    .then((evaluation: PhotoEvaluation) => setEvaluation(evaluation));
+  }, [imageURI]);
 
   const handleBackPress = () => { navigation.goBack() };
 
-  const evaluationCriteriaCards = [EvaluationCriteria.Exposure, EvaluationCriteria.BackgroundBlur, EvaluationCriteria.WhiteBalance].map((criteria) => (
-    <EvaluationCard criteria={criteria} key={criteria} />
+  const evaluationCriteriaCards = [EvaluationCriteria.Exposure, EvaluationCriteria.BackgroundBlur, EvaluationCriteria.Noise].map((criteria) => (
+    <EvaluationCard criteria={criteria} value={evaluation[criteria]} key={criteria} />
   ));
 
   return (
@@ -31,7 +46,6 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
         <Appbar.Content title="Test" />
       </Appbar.Header>
       <View style={styles.contentArea}>
-        <Image source={{ uri: imageURI }} style={{ width: 160, height: 90 }} />
         {evaluationCriteriaCards}
       </View>
     </View>

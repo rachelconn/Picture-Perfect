@@ -28,7 +28,7 @@ export default StyleSheet.create({
   evaluationCardTitle: {
     fontFamily: 'roboto',
     color: 'black',
-    fontSize: windowSize.width * 0.08,
+    fontSize: windowSize.width * 0.07,
     flexWrap: 'wrap',
   },
   evaluationCardDescription: {

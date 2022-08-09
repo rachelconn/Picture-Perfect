@@ -190,7 +190,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 				// StringBuilder base64EncodedImage = new StringBuilder("data:image/jpeg;base64,");
 				// base64EncodedImage.append(Base64.encodeToString(bytes, Base64.DEFAULT));
-				promise.resolve(Base64.encodeToString(bytes, Base64.URL_SAFE));
+				promise.resolve(Base64.encodeToString(bytes, Base64.URL_SAFE | Base64.NO_WRAP));
 
 				// Close resources
 				captureRequestBuilder.removeTarget(imageReader.getSurface());
