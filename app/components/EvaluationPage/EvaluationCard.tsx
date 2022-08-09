@@ -5,17 +5,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styles, { windowSize } from './styles';
 
 export enum EvaluationCriteria {
-  Exposure,
-  GlobalBlur,
-  BackgroundBlur,
-  WhiteBalance,
+  Exposure = 'exposure',
+  GlobalBlur = 'blur',
+  BackgroundBlur = 'backgroundBlur',
+  WhiteBalance = 'whiteBalance',
+  Noise = 'noise',
 };
 
 interface EvaluationCriteriaProps {
   name: string,
   descriptionGood: string,
-  // descriptionTooHigh: string,
-  // descriptionTooLow: string,
+  // descriptionHigh: string,
+  // descriptionLow: string,
   // TODO: define threshold for low/high and provide feedback accordingly
   icon: string,
 };
@@ -23,7 +24,7 @@ interface EvaluationCriteriaProps {
 const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProps> = {
   [EvaluationCriteria.Exposure]: {
     name: 'Exposure',
-    descriptionGood: 'Your image is properly exposed. Good job!',
+    descriptionGood: 'Your image is properly exposed.',
     icon: 'contrast-box',
   },
   [EvaluationCriteria.GlobalBlur]: {
@@ -41,13 +42,19 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
     descriptionGood: 'Your image has proper white balance, and the tones look natural.',
     icon: 'white-balance-sunny',
   },
+  [EvaluationCriteria.Noise]: {
+    name: 'Noise',
+    descriptionGood: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
+    icon: 'grain',
+  },
 };
 
 interface EvaluationCardProps {
   criteria: EvaluationCriteria,
+  value: number,
 };
 
-const EvaluationCard: React.FC<EvaluationCardProps> = ({ criteria }) => {
+const EvaluationCard: React.FC<EvaluationCardProps> = ({ criteria, value }) => {
   const props = evaluationCriteriaProps[criteria];
 
   const icon = <MaterialCommunityIcons size={windowSize.height * 0.08} name={props.icon} color="#323232" />;
@@ -59,7 +66,7 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({ criteria }) => {
           {icon}
         </View>
         <View style={styles.evaluationCardTextContainer}>
-          <Text style={styles.evaluationCardTitle}>{props.name}</Text>
+          <Text style={styles.evaluationCardTitle}>{`${props.name}: ${value.toFixed(2)}`}</Text>
           <Text style={styles.evaluationCardDescription}>{props.descriptionGood}</Text>
         </View>
       </View>

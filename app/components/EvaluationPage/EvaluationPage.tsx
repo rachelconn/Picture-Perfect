@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { Appbar, useTheme } from 'react-native-paper';
-import '../../models/models';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import { EvaluationPageNavigationProp } from '../common/NavigationStack/NavigationStack';
@@ -23,7 +22,9 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
 
   // Get photo evaluation when URI is updated
   React.useEffect(() => {
-    fetch('192.168.0.191:8000/eval', {
+    if (!imageURI) return;
+
+    fetch('http://192.168.0.191:8000/eval', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({'image': imageURI}),
@@ -34,9 +35,12 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
 
   const handleBackPress = () => { navigation.goBack() };
 
-  const evaluationCriteriaCards = [EvaluationCriteria.Exposure, EvaluationCriteria.BackgroundBlur, EvaluationCriteria.Noise].map((criteria) => (
-    <EvaluationCard criteria={criteria} value={evaluation[criteria]} key={criteria} />
-  ));
+  let evaluationCriteriaCards = undefined;
+  if (evaluation) {
+    evaluationCriteriaCards = [EvaluationCriteria.Exposure, EvaluationCriteria.GlobalBlur, EvaluationCriteria.Noise].map((criteria) => (
+      <EvaluationCard criteria={criteria} value={evaluation[criteria]} key={criteria} />
+    ));
+  }
 
   return (
     <View style={styles.background}>
