@@ -1,10 +1,8 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator, Appbar, Modal, Portal, Text, useTheme } from 'react-native-paper';
-import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
+import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
-import { EvaluationPageNavigationProp } from '../common/NavigationStack/NavigationStack';
+import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import EvaluationCard, { EvaluationCriteria } from './EvaluationCard';
 import styles from './styles';
 
@@ -16,8 +14,6 @@ interface EvaluationPageProps {
 
 const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) => {
   const { imageURI } = React.useContext(NavigationContext);
-  const theme = useTheme();
-  const navigation = useNavigation<EvaluationPageNavigationProp>();
   const [evaluation, setEvaluation] = React.useState<PhotoEvaluation>();
 
   // Get photo evaluation when URI is updated
@@ -33,7 +29,6 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
     .then((evaluation: PhotoEvaluation) => setEvaluation(evaluation));
   }, [imageURI]);
 
-  const handleBackPress = () => { navigation.goBack() };
 
   // Show evaluation cards if evaluation is complete, otherwise inform user of loading
   const pageContent = evaluation ? (
@@ -55,16 +50,9 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
 
 
   return (
-    <View style={styles.background}>
-      <FocusAwareStatusBar barStyle="light-content" translucent backgroundColor={`${theme.colors.primary}`} />
-      <Appbar.Header>
-        <Appbar.Action icon="arrow-left" onPress={handleBackPress} />
-        <Appbar.Content title="Test" />
-      </Appbar.Header>
-      <View style={styles.contentArea}>
-        {pageContent}
-      </View>
-    </View>
+    <PageWithAppbar title="Evaluation">
+      {pageContent}
+    </PageWithAppbar>
   );
 };
 
