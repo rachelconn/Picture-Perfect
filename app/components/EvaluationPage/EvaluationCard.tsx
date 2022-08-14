@@ -1,8 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles, { windowSize } from './styles';
+import IconCard from '../common/IconCard/IconCard';
 
 export enum EvaluationCriteria {
   Exposure = 'exposure',
@@ -57,20 +54,12 @@ interface EvaluationCardProps {
 const EvaluationCard: React.FC<EvaluationCardProps> = ({ criteria, value }) => {
   const props = evaluationCriteriaProps[criteria];
 
-  const icon = <MaterialCommunityIcons size={windowSize.height * 0.08} name={props.icon} color="#323232" />;
-
   return (
-    <View style={styles.evaluationCardContainer}>
-      <View style={styles.evaluationCardContent}>
-        <View style={styles.evaluationCardIconContainer}>
-          {icon}
-        </View>
-        <View style={styles.evaluationCardTextContainer}>
-          <Text style={styles.evaluationCardTitle}>{`${props.name}: ${value.toFixed(2)}`}</Text>
-          <Text style={styles.evaluationCardDescription}>{props.descriptionGood}</Text>
-        </View>
-      </View>
-    </View>
+    <IconCard
+      title={`${props.name}: ${value.toFixed(2)}`}
+      description={props.descriptionGood}
+      icon={props.icon}
+    />
   );
 };
 
