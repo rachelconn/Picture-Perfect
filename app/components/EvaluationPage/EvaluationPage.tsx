@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { Appbar, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Modal, Portal, Text, useTheme } from 'react-native-paper';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import { EvaluationPageNavigationProp } from '../common/NavigationStack/NavigationStack';
@@ -35,12 +35,24 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
 
   const handleBackPress = () => { navigation.goBack() };
 
-  let evaluationCriteriaCards = undefined;
-  if (evaluation) {
-    evaluationCriteriaCards = [EvaluationCriteria.Exposure, EvaluationCriteria.GlobalBlur, EvaluationCriteria.Noise].map((criteria) => (
+  // Show evaluation cards if evaluation is complete, otherwise inform user of loading
+  const pageContent = evaluation ? (
+    [EvaluationCriteria.Exposure, EvaluationCriteria.GlobalBlur, EvaluationCriteria.Noise].map((criteria) => (
       <EvaluationCard criteria={criteria} value={evaluation[criteria]} key={criteria} />
-    ));
-  }
+    ))
+  ) : (
+    <Portal>
+      <Modal visible style={styles.loadingModal}>
+        <View style={styles.loadingModalContent}>
+          <ActivityIndicator size="large" color="white" />
+          <Text style={styles.loadingText}>
+            Evaluating...
+          </Text>
+        </View>
+      </Modal>
+    </Portal>
+  );
+
 
   return (
     <View style={styles.background}>
@@ -50,7 +62,7 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
         <Appbar.Content title="Test" />
       </Appbar.Header>
       <View style={styles.contentArea}>
-        {evaluationCriteriaCards}
+        {pageContent}
       </View>
     </View>
   );

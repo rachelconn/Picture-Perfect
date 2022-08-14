@@ -47,4 +47,25 @@ export default StyleSheet.create({
     alignSelf: 'center',
     marginRight: windowSize.width * 0.01,
   },
+  loadingModal: {
+    width: windowSize.width,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingModalContent: {
+    width: windowSize.width * 0.3,
+    height: windowSize.width * 0.3,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000000b0',
+    borderRadius: windowSize.width * 0.02,
+  },
+  loadingText: {
+    fontFamily: 'roboto',
+    color: 'white',
+    fontSize: windowSize.width * 0.04,
+  },
 });
