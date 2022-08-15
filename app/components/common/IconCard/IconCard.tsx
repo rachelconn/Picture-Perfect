@@ -1,18 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableHighlight, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles, { windowSize } from './styles';
 
-interface IconCardProps {
+export interface IconCardProps {
   title: string,
   description: string,
   icon: string,
+  onPress?: () => any,
 };
 
-const IconCard: React.FC<IconCardProps> = ({ title, description, icon }) => {
+const IconCard: React.FC<IconCardProps> = ({ title, description, icon, onPress }) => {
   return (
-    <View style={styles.cardContainer}>
+    <TouchableHighlight style={styles.cardContainer} onPress={onPress} underlayColor="darkgray">
       <View style={styles.content}>
         <View style={styles.iconContainer}>
           <MaterialCommunityIcons size={windowSize.height * 0.08} name={icon} color="#323232" />
@@ -22,7 +23,7 @@ const IconCard: React.FC<IconCardProps> = ({ title, description, icon }) => {
           <Text style={styles.description}>{description}</Text>
         </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 };
 
