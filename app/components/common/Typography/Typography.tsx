@@ -15,14 +15,15 @@ interface TypographyProps {
   children?: React.ReactNode,
   variant: TypographyVariant,
   color?: string,
+  style?: object,
 };
 
-const Typography: React.FC<TypographyProps> = ({ variant, color, children }) => {
-  const style = { ...variantStyles[variant] };
-  if (color) style.color = color;
+const Typography: React.FC<TypographyProps> = ({ variant, color, children, style }) => {
+  const computedStyle = { ...variantStyles[variant], ...(style ?? {}) };
+  if (color) computedStyle.color = color;
 
   return (
-    <Text style={style}>
+    <Text style={computedStyle}>
       {children}
     </Text>
   );
