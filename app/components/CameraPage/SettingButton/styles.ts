@@ -17,16 +17,6 @@ export default StyleSheet.create({
     transform: [{ rotate: '90deg'}],
     position: 'relative',
   },
-  settingNameText: {
-    fontFamily: 'roboto',
-    color: 'white',
-    fontSize: 24,
-  },
-  settingValueText: {
-    fontFamily: 'roboto',
-    color: 'white',
-    fontSize: 16,
-  },
   sliderContainer: {
     position: 'absolute',
     left: settingButtonSize + 8,

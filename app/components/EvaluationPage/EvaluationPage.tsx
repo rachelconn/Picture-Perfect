@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
+import Typography from '../common/Typography/Typography';
 import EvaluationCard, { EvaluationCriteria } from './EvaluationCard';
 import styles from './styles';
 
@@ -40,9 +41,9 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
       <Modal visible style={styles.loadingModal}>
         <View style={styles.loadingModalContent}>
           <ActivityIndicator size="large" color="white" />
-          <Text style={styles.loadingText}>
+          <Typography variant="bodyMedium" color="white">
             Evaluating...
-          </Text>
+          </Typography>
         </View>
       </Modal>
     </Portal>

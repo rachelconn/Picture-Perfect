@@ -19,9 +19,4 @@ export default StyleSheet.create({
     backgroundColor: '#000000b0',
     borderRadius: windowSize.width * 0.02,
   },
-  loadingText: {
-    fontFamily: 'roboto',
-    color: 'white',
-    fontSize: windowSize.width * 0.04,
-  },
 });

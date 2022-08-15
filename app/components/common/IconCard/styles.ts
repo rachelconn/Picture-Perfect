@@ -15,18 +15,6 @@ export default StyleSheet.create({
     flexGrow: 1,
     width: 0,
   },
-  title: {
-    fontFamily: 'roboto',
-    color: 'black',
-    fontSize: windowSize.width * 0.07,
-    flexWrap: 'wrap',
-  },
-  description: {
-    fontFamily: 'roboto',
-    color: 'black',
-    fontSize: windowSize.width * 0.04,
-    flexWrap: 'wrap',
-  },
   content: {
     display: 'flex',
     flexDirection: 'row',

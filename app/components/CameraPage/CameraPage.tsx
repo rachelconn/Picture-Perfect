@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Camera as ExpoCamera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
@@ -10,6 +10,7 @@ import Camera from './Camera';
 import { CameraPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
+import Typography from '../common/Typography/Typography';
 
 const CameraPage: React.FC = () => {
   const navigation = useNavigation<CameraPageNavigationProp>();
@@ -44,7 +45,7 @@ const CameraPage: React.FC = () => {
   };
 
   if (hasCameraPermission === undefined) return <View style={styles.background} />;
-  else if (hasCameraPermission === false) return <Text>Camera permission denied.</Text>;
+  else if (hasCameraPermission === false) return <Typography color="black" variant="bodyLarge">Camera permission denied.</Typography>;
   return (
     <View style={styles.background}>
       <FocusAwareStatusBar hidden />

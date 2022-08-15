@@ -1,13 +1,13 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import React from 'react';
-import { Animated, Pressable, StyleProp, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Animated, Pressable, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   CameraSetting, getAvailableExposureTimes, getAvailableFocusDistances, getAvailableISOValues, getAvailableZoomValues, setAutoExposure, setAutoFocus, setExposureTime, setFocusDistance, setISO, setWhiteBalance
 } from '../../../redux/cameraSettings';
 import { useDispatch, useSelector } from '../../../redux/store';
 import Slider from '../../common/Slider/Slider';
+import Typography from '../../common/Typography/Typography';
 import SettingAutoToggle, { AutoCameraSetting } from './SettingAutoToggle';
 import styles, { autoToggleSize } from './styles';
 
@@ -36,7 +36,7 @@ interface SettingProps {
 // TODO: add white balance once implemented
 const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
   [CameraSetting.ISO]: {
-    icon: <Text style={styles.settingNameText}>ISO</Text>,
+    icon: <Typography variant="bodyLarge" color="white">ISO</Typography>,
     setter: setISO,
     autoSetting: CameraSetting.AutoExposure,
     getRange: getAvailableISOValues,
@@ -59,7 +59,7 @@ const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
     unit: '',
   },
   // [CameraSetting.WhiteBalance]: {
-  //   icon: <Text style={styles.settingNameText}>WB</Text>,
+  //   icon: <Typography variant="bodyLarge" color="white">WB</Typography>,
   //   setter: setWhiteBalance,
   //   getRange: getAvail
   //   unit: 'K',
@@ -140,9 +140,9 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
   return (
     <AnimatedPressable style={touchableStyle} onPress={handleButtonPress}>
       {props.icon}
-      <Text style={styles.settingValueText}>
+      <Typography variant="bodySmall" color="white">
         {formatValue(value, props.unit, isAuto, props.formattedMultiplier)}
-      </Text>
+      </Typography>
       {slider}
     </AnimatedPressable>
   );

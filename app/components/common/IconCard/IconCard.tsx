@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Typography from '../Typography/Typography';
 import styles, { windowSize } from './styles';
 
 export interface IconCardProps {
@@ -19,8 +19,8 @@ const IconCard: React.FC<IconCardProps> = ({ title, description, icon, onPress }
           <MaterialCommunityIcons size={windowSize.height * 0.08} name={icon} color="#323232" />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Typography variant="title">{title}</Typography>
+          <Typography variant="bodyMedium">{description}</Typography>
         </View>
       </View>
     </TouchableHighlight>
