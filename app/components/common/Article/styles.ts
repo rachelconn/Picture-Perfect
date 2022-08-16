@@ -10,4 +10,16 @@ export default StyleSheet.create({
   sectionHeader: {
     paddingBottom: windowSize.width * 0.03,
   },
+  imageContainer: {
+    alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    width: windowSize.width,
+    alignItems: 'center',
+    paddingTop: windowSize.width * 0.03,
+  },
+  imageCaption: {
+    width: windowSize.width * 0.8,
+    textAlign: 'center',
+  },
 });

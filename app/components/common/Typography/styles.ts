@@ -27,4 +27,10 @@ export default StyleSheet.create({
     fontSize: windowSize.width * 0.03,
     flexWrap: 'wrap',
   },
+  caption: {
+    fontFamily: 'roboto',
+    color: 'darkgray',
+    fontSize: windowSize.width * 0.03,
+    flexWrap: 'wrap',
+  },
 });
