@@ -8,7 +8,7 @@ interface ParagraphProps {
 
 const Paragraph: React.FC<ParagraphProps> = ({ children }) => {
   return (
-    <Typography variant="bodyMedium">
+    <Typography style={styles.paragraph} variant="bodyMedium">
       {children}
     </Typography>
   );

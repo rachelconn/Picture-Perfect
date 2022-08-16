@@ -10,6 +10,10 @@ export default StyleSheet.create({
   sectionHeader: {
     paddingBottom: windowSize.width * 0.03,
   },
+  paragraph: {
+    marginLeft: windowSize.width * 0.02,
+    marginRight: windowSize.width * 0.02,
+  },
   imageContainer: {
     alignSelf: 'center',
     display: 'flex',
