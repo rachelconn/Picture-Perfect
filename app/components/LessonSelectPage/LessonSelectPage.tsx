@@ -1,27 +1,33 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import IconCard, { IconCardProps } from '../common/IconCard/IconCard';
+import IconCard from '../common/IconCard/IconCard';
 import { LessonSelectPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 
-const lessons: IconCardProps[] = [
-  {
-    title: 'Exposure',
+type Lesson = 'Exposure';
+
+interface LessonProperties {
+  description: string,
+  icon: string,
+};
+
+const lessons: Record<Lesson, LessonProperties> = {
+  Exposure: {
     description: 'Learn what exposure is, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
     icon: 'contrast-box',
-  }
-];
+  },
+};
 
 const LessonSelectPage: React.FC = () => {
   const navigation = useNavigation<LessonSelectPageNavigationProp>();
 
-  const lessonCards = lessons.map((lesson) => (
+  const lessonCards = Object.entries(lessons).map(([title, props]) => (
     <IconCard
-      title={lesson.title}
-      description={lesson.description}
-      icon={lesson.icon}
-      onPress={() => navigation.navigate('Camera')}
-      key={lesson.title}
+      title={title}
+      description={props.description}
+      icon={props.icon}
+      onPress={() => navigation.navigate(title as Lesson)}
+      key={title}
     />
   ));
 
