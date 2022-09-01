@@ -8,6 +8,7 @@ import properlyExposedImage from '../../images/properlyexposed.jpg';
 const underexposedImageCaption = "This image is underexposed. Despite being taken midday in a bright area, most of the image is very dark, including the sky.";
 const overexposedImageCaption = "This image is overexposed. The sky and road are incredibly bright, and the colors in much of the image are washed out. While parts of the tree and sidewalk are properly exposed, it's important to consider the composition of the photo overall when judging exposure.";
 const properlyExposedImageCaption = "This image is properly exposed. The colors are rich and lifelike throughout the image, and the background's brightness doesn't jump out from the rest of the image like the other two images above.";
+const noisyImageCaption = "Notice how the photo in this example looks grainy, like it was taken with an antique camera. This is due to the ISO value being set too high, creating digital noise.";
 
 // TODO: bring up intentional over/underexposure
 // "In addition, you can manually under- or overexpose an image to achieve interesting visual effects -> have a couple example images"
@@ -44,6 +45,13 @@ const ExposureLesson: React.FC = () => {
           it's important to consider ISO's effect on noise.
         </Article.Paragraph>
         <Article.SectionHeader>Dealing With Noise</Article.SectionHeader>
+        <Article.Paragraph>
+          While increasing the ISO of a photo will let you get the same level of exposure with a shorter shutter speed,
+          it also has a tendency to produce digital noise.
+          Since the camera's sensors are more sensitive, they can pick up erroneous information that leads to photos that look fuzzy or grainy.
+          This grain is known as noise, and knowing how to control the amount of noise in an image is key to taking great photographs.
+          <Article.CaptionedImage source={} caption={noisyImageCaption} />
+        </Article.Paragraph>
       </Article.Container>
     </PageWithAppbar>
   );
