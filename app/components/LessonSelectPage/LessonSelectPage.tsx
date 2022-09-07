@@ -4,7 +4,7 @@ import IconCard from '../common/IconCard/IconCard';
 import { LessonSelectPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 
-type Lesson = 'Exposure';
+export type Lesson = 'Exposure';
 
 interface LessonProperties {
   description: string,
