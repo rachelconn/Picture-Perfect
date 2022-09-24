@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Lesson } from '../../classes/lesson';
+import { setCurrentLesson } from '../../redux/currentLesson';
+import { useDispatch } from '../../redux/store';
 import IconCard from '../common/IconCard/IconCard';
 import { LessonSelectPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
@@ -18,17 +20,26 @@ const lessons: Record<Lesson, LessonProperties> = {
 };
 
 const LessonSelectPage: React.FC = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<LessonSelectPageNavigationProp>();
 
-  const lessonCards = Object.entries(lessons).map(([title, props]) => (
-    <IconCard
-      title={title}
-      description={props.description}
-      icon={props.icon}
-      onPress={() => navigation.navigate(title as Lesson)}
-      key={title}
-    />
-  ));
+  const lessonCards = Object.entries(lessons).map(([title, props]) => {
+    const handlePress = () => {
+      const lesson = title as Lesson;
+      dispatch(setCurrentLesson(lesson));
+      navigation.navigate(lesson);
+    };
+
+    return (
+      <IconCard
+        title={title}
+        description={props.description}
+        icon={props.icon}
+        onPress={handlePress}
+        key={title}
+      />
+    );
+  });
 
   return (
     <PageWithAppbar title="Lessons">

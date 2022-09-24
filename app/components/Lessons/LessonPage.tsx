@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Button } from 'react-native-paper';
 import { Lesson } from '../../classes/lesson';
+import { setCurrentLessonSection } from '../../redux/currentLesson';
+import { useDispatch } from '../../redux/store';
 import Article from '../common/Article/index';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import styles from './styles';
@@ -13,12 +15,14 @@ interface LessonPageProps {
   children: React.ReactNode,
 };
 
-const LessonPage: React.FC<LessonPageProps> = ({ title, children }) => {
+const LessonPage: React.FC<LessonPageProps> = ({ title, children, sectionId }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const handleStartLessonButtonPress = () => {
     // TODO: fix typing, set correct props on navigation
-    navigation.navigate('Camera')
+    dispatch(setCurrentLessonSection(sectionId));
+    navigation.navigate('Camera');
   };
 
   const startLessonButton = (
