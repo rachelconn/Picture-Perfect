@@ -5,10 +5,12 @@ import {
   useSelector as useSelectorBase
 } from "react-redux";
 import { cameraSettingsReducer } from "./cameraSettings";
+import { currentLessonReducer } from "./currentLesson";
 
 const store = configureStore({
   reducer: {
     cameraSettings: cameraSettingsReducer,
+    currentLesson: currentLessonReducer,
   }
 });
 
