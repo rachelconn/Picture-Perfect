@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Lesson } from '../classes/lesson';
 import { EvaluationCriteria } from '../components/EvaluationPage/EvaluationCard';
-import { Lesson } from '../components/LessonSelectPage/LessonSelectPage';
 /**
  * Helper functions that manage saving/loading persistent storage like lesson progress and evaluations.
  */

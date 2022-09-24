@@ -1,10 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { LayoutChangeEvent, LayoutRectangle, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { Lesson } from '../../classes/lesson';
 import Article from '../common/Article/index';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
-import { Lesson } from '../LessonSelectPage/LessonSelectPage';
 import styles from './styles';
 
 interface LessonPageProps {

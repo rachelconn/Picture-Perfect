@@ -1,10 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { Lesson } from '../../classes/lesson';
 import IconCard from '../common/IconCard/IconCard';
 import { LessonSelectPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
-
-export type Lesson = 'Exposure';
 
 interface LessonProperties {
   description: string,
