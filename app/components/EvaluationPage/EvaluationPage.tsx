@@ -1,10 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
+import { EvaluationCriteria } from '../../classes/evaluation';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
-import EvaluationCard, { EvaluationCriteria } from './EvaluationCard';
+import EvaluationCard from './EvaluationCard';
 import styles from './styles';
 
 type PhotoEvaluation = Record<EvaluationCriteria, number>;
@@ -21,7 +22,7 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
   React.useEffect(() => {
     if (!imageURI) return;
 
-    fetch('http://192.168.0.191:8000/eval', {
+    fetch('http://192.168.10.17:8000/eval', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({'image': imageURI}),
