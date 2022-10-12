@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
-import { EvaluationCriteria } from '../../classes/evaluation';
+import { EvaluationCriteria, LessonEvaluationCriteria } from '../../classes/evaluation';
+import { useSelector } from '../../redux/store';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
@@ -14,9 +15,18 @@ interface EvaluationPageProps {
   evaluationCriteria?: EvaluationCriteria[],
 };
 
+const defaultCriteria = [
+  EvaluationCriteria.Exposure,
+  EvaluationCriteria.GlobalBlur,
+  EvaluationCriteria.Noise,
+];
+
 const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) => {
   const { imageURI } = React.useContext(NavigationContext);
   const [evaluation, setEvaluation] = React.useState<PhotoEvaluation>();
+  const currentLesson = useSelector((state) => state.currentLesson);
+
+  const criteriaToUse = currentLesson.lesson ? LessonEvaluationCriteria[currentLesson.lesson] : defaultCriteria;
 
   // Get photo evaluation when URI is updated
   React.useEffect(() => {
@@ -34,7 +44,7 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ evaluationCriteria }) =
 
   // Show evaluation cards if evaluation is complete, otherwise inform user of loading
   const pageContent = evaluation ? (
-    [EvaluationCriteria.Exposure, EvaluationCriteria.GlobalBlur, EvaluationCriteria.Noise].map((criteria) => (
+    criteriaToUse.map((criteria) => (
       <EvaluationCard criteria={criteria} value={evaluation[criteria]} key={criteria} />
     ))
   ) : (

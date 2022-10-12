@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Lesson } from '../../classes/lesson';
+import Lesson from '../../classes/lesson';
 import { setCurrentLesson } from '../../redux/currentLesson';
 import { useDispatch } from '../../redux/store';
 import IconCard from '../common/IconCard/IconCard';
@@ -13,7 +13,7 @@ interface LessonProperties {
 };
 
 const lessons: Record<Lesson, LessonProperties> = {
-  Exposure: {
+  [Lesson.Exposure]: {
     description: 'Learn what exposure is, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
     icon: 'contrast-box',
   },

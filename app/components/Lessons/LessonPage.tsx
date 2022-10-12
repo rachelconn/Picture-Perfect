@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Button } from 'react-native-paper';
-import { Lesson } from '../../classes/lesson';
+import Lesson from '../../classes/lesson';
 import { setCurrentLessonSection } from '../../redux/currentLesson';
 import { useDispatch } from '../../redux/store';
 import Article from '../common/Article/index';

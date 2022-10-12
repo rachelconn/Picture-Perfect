@@ -11,11 +11,13 @@ import { CameraPageNavigationProp } from '../common/NavigationStack/NavigationSt
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import Typography from '../common/Typography/Typography';
+import { useSelector } from '../../redux/store';
 
 const CameraPage: React.FC = () => {
   const navigation = useNavigation<CameraPageNavigationProp>();
   const [hasCameraPermission, setHasCameraPermission] = React.useState<Boolean>();
   const { setImageURI } = useContext(NavigationContext);
+  const cameraSettings = useSelector((state) => state.cameraSettings);
 
   React.useEffect(() => {
     (async () => {
@@ -26,14 +28,13 @@ const CameraPage: React.FC = () => {
 
   }, []);
 
-  const cameraSettings: AdjustableCameraSetting[] = [
+  const adjustableSettings: AdjustableCameraSetting[] = [
     CameraSetting.FocusDistance,
     CameraSetting.ExposureTime,
     CameraSetting.ISO,
-    // CameraSetting.WhiteBalance
   ];
 
-  const settingButtons = cameraSettings.map((setting) => (
+  const settingButtons = adjustableSettings.map((setting) => (
     <SettingButton setting={setting} key={setting} />
   ));
 

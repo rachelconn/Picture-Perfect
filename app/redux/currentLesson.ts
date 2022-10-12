@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import { Lesson } from '../classes/lesson';
+import Lesson from '../classes/lesson';
 
 interface CurrentLessonState {
   lesson: Lesson | undefined,

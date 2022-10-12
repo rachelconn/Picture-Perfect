@@ -1,3 +1,5 @@
-export type Lesson = (
-  'Exposure'
-);
+enum Lesson {
+  Exposure = 'Exposure',
+};
+
+export default Lesson;
