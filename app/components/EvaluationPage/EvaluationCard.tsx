@@ -3,8 +3,7 @@ import { Evaluation, EvaluationCriteria } from '../../classes/evaluation';
 import IconCard from '../common/IconCard/IconCard';
 
 interface EvaluationCardProps {
-  criteria: EvaluationCriteria,
-  value: number,
+  evaluation: Evaluation,
 };
 
 const icon: Record<EvaluationCriteria, string> = {
@@ -15,14 +14,12 @@ const icon: Record<EvaluationCriteria, string> = {
   [EvaluationCriteria.Noise]: 'grain',
 };
 
-const EvaluationCard: React.FC<EvaluationCardProps> = ({ criteria, value }) => {
-  const evaluation = new Evaluation(criteria, value);
-
+const EvaluationCard: React.FC<EvaluationCardProps> = ({ evaluation }) => {
   return (
     <IconCard
-      title={`${evaluation.getName()}: ${value.toFixed(2)}`}
-      description={evaluation.getFeedback()}
-      icon={icon[criteria]}
+      title={`${evaluation.name}: ${evaluation.value.toFixed(2)}`}
+      description={evaluation.feedback.comment}
+      icon={icon[evaluation.criteria]}
     />
   );
 };
