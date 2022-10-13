@@ -2,7 +2,7 @@ import { Dimensions, StatusBar, StyleSheet } from "react-native"
 
 const windowSize = Dimensions.get('window');
 const statusBarHeight = StatusBar.currentHeight ?? 0;
-const pageHeight = windowSize.height - statusBarHeight
+const pageHeight = windowSize.height - statusBarHeight;
 
 export default StyleSheet.create({
   background: {
