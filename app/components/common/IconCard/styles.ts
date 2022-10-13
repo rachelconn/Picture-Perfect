@@ -15,6 +15,14 @@ export default StyleSheet.create({
     flexGrow: 1,
     width: 0,
   },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'fade',
+    alignItems: 'center',
+  },
   content: {
     display: 'flex',
     flexDirection: 'row',

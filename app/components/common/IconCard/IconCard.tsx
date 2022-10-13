@@ -8,18 +8,36 @@ export interface IconCardProps {
   title: string,
   description: string,
   icon: string,
+  titleIcon?: string,
+  titleIconColor?: string,
   onPress?: () => any,
 };
 
-const IconCard: React.FC<IconCardProps> = ({ title, description, icon, onPress }) => {
+const defaultIconColor = '#323232';
+
+const IconCard: React.FC<IconCardProps> = ({
+  title,
+  description,
+  icon,
+  titleIcon,
+  titleIconColor,
+  onPress,
+}) => {
+  const titleIconComponent = titleIcon ? (
+    <MaterialCommunityIcons size={windowSize.height * 0.035} name={titleIcon} color={titleIconColor || defaultIconColor} />
+  ) : undefined;
+
   return (
     <TouchableHighlight style={styles.cardContainer} onPress={onPress} underlayColor="darkgray">
       <View style={styles.content}>
         <View style={styles.iconContainer}>
-          <MaterialCommunityIcons size={windowSize.height * 0.08} name={icon} color="#323232" />
+          <MaterialCommunityIcons size={windowSize.height * 0.08} name={icon} color={defaultIconColor} />
         </View>
         <View style={styles.textContainer}>
-          <Typography variant="title">{title}</Typography>
+          <View style={styles.titleContainer}>
+            {titleIconComponent}
+            <Typography variant="title">{title}</Typography>
+          </View>
           <Typography variant="bodyMedium">{description}</Typography>
         </View>
       </View>
