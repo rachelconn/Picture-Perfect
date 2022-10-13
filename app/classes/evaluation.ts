@@ -1,11 +1,15 @@
 import Lesson from './lesson';
 
+/**
+ * Evaluation criteria avaiable from the evaluation backend.
+ * Note that the names match those used by the backend, not user-friendly display names.
+ */
 export enum EvaluationCriteria {
-  Exposure = 'Exposure',
-  GlobalBlur = 'Blur',
-  Bokeh = 'Bokeh',
-  WhiteBalance = 'White Balance',
-  Noise = 'Noise',
+  Exposure = 'exposure',
+  GlobalBlur = 'blur',
+  Bokeh = 'backgroundBlur',
+  WhiteBalance = 'whiteBalance',
+  Noise = 'noise',
 };
 
 export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
@@ -16,60 +20,90 @@ export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
   ],
 };
 
+interface EvaluationFeedback {
+  comment: string,
+  isGood: boolean,
+};
+
 // Helpers for Evaluation class
-function getExposureEvaluation(value: number): string {
+function getExposureFeedback(value: number): EvaluationFeedback {
   // TODO: use min/max ISO/shutter time values to guide feedback
-  if (value > 0.5) return 'The image you took is overexposed. Try decreasing your ISO or shutter time.'
-  if (value < -0.5) return 'The image you took is underexposed. If your photo is stationary or slow-moving, increase your shutter time. If you notice blurred objects, instead increase your ISO.';
-  return 'Your image is properly exposed.';
+  if (value > 0.5) {
+    return {
+      comment: 'The image you took is overexposed. Try decreasing your ISO or shutter time.',
+      isGood: false,
+    };
+  }
+  if (value < -0.5) {
+    return {
+      comment: 'The image you took is underexposed. If your photo is stationary or slow-moving, increase your shutter time. If you notice blurred objects, instead increase your ISO.',
+      isGood: false,
+    };
+  }
+  return {
+    comment: 'Your image is properly exposed.',
+    isGood: true,
+  };
 }
 
 // TODO: give useful feedback
-function getGlobalBlurEvaluation(value: number): string {
-    return 'The entire image is sharp. Well done!';
+function getGlobalBlurFeedback(value: number): EvaluationFeedback {
+    return {
+      comment: 'The entire image is sharp. Well done!',
+      isGood: true,
+    };
 }
 
 // TODO: give useful feedback
-function getBackgroundBlurEvaluation(value: number): string {
-    return 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!';
+function getBackgroundBlurFeedback(value: number): EvaluationFeedback {
+    return {
+      comment: 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!',
+      isGood: true,
+    };
 }
 
 // TODO: give useful feedback
-function getWhiteBalanceEvaluation(value: number): string {
-    return 'Your image has proper white balance, and the tones look natural.';
+function getWhiteBalanceFeedback(value: number): EvaluationFeedback {
+    return {
+      comment: 'Your image has proper white balance, and the tones look natural.',
+      isGood: true,
+    };
 }
 
 // TODO: give useful feedback
-function getNoiseEvaluation(value: number): string {
-    return 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!';
+function getNoiseFeedback(value: number): EvaluationFeedback {
+    return {
+      comment: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
+      isGood: true,
+    };
 }
 
 interface EvaluationCriteriaProps {
   name: string,
   // TODO: incorporate camera settings into feedback
-  getEvaluation: (value: number) => string,
+  getFeedback: (value: number) => EvaluationFeedback,
 };
 
 const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProps> = {
   [EvaluationCriteria.Exposure]: {
     name: 'Exposure',
-    getEvaluation: getExposureEvaluation,
+    getFeedback: getExposureFeedback,
   },
   [EvaluationCriteria.GlobalBlur]: {
     name: 'Blur',
-    getEvaluation: getGlobalBlurEvaluation,
+    getFeedback: getGlobalBlurFeedback,
   },
   [EvaluationCriteria.Bokeh]: {
     name: 'Bokeh',
-    getEvaluation: getBackgroundBlurEvaluation,
+    getFeedback: getBackgroundBlurFeedback,
   },
   [EvaluationCriteria.WhiteBalance]: {
     name: 'White Balance',
-    getEvaluation: getWhiteBalanceEvaluation,
+    getFeedback: getWhiteBalanceFeedback,
   },
   [EvaluationCriteria.Noise]: {
     name: 'Noise',
-    getEvaluation: getNoiseEvaluation,
+    getFeedback: getNoiseFeedback,
   },
 };
 
@@ -77,19 +111,34 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
  * Object representing the evaluation given for a single criteria
  */
 export class Evaluation {
-  criteria: EvaluationCriteria;
-  value: number;
+  #criteria: EvaluationCriteria;
+  #value: number;
+  #feedback?: EvaluationFeedback;
 
   constructor(criteria: EvaluationCriteria, value: number) {
-    this.criteria = criteria;
-    this.value = value;
+    this.#criteria = criteria;
+    this.#value = value;
   }
 
-  getName(): string {
-    return evaluationCriteriaProps[this.criteria].name;
+  public get criteria(): EvaluationCriteria {
+    return this.#criteria;
   }
 
-  getFeedback(): string {
-    return evaluationCriteriaProps[this.criteria].getEvaluation(this.value);
+  // Returns a user-friendly name for the evaluation criteria
+  public get name(): string {
+    return evaluationCriteriaProps[this.#criteria].name;
+  }
+
+  public get value(): number {
+    return this.#value;
+  }
+
+  // Returns feedback for the criteria based on its value
+  public get feedback(): EvaluationFeedback {
+    // Cache feedback to avoid recalculating
+    if (!this.#feedback) {
+      this.#feedback = evaluationCriteriaProps[this.#criteria].getFeedback(this.value);
+    }
+    return this.#feedback;
   }
 }
