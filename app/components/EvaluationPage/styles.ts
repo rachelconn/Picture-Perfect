@@ -8,6 +8,7 @@ export default StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    pointerEvents: 'none',
   },
   loadingModalContent: {
     width: windowSize.width * 0.3,
