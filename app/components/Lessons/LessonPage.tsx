@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import Lesson from '../../classes/lesson';
-import { setCurrentLessonSection } from '../../redux/currentLesson';
-import { useDispatch } from '../../redux/store';
 import AnchoredButton from '../common/AnchoredButton/AnchoredButton';
 import Article from '../common/Article/index';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
@@ -11,17 +9,13 @@ import styles from './styles';
 interface LessonPageProps {
   title: string,
   lessonId: Lesson,
-  sectionId: string,
   children: React.ReactNode,
 };
 
-const LessonPage: React.FC<LessonPageProps> = ({ title, children, sectionId }) => {
-  const dispatch = useDispatch();
+const LessonPage: React.FC<LessonPageProps> = ({ title, children }) => {
   const navigation = useNavigation();
 
   const handleStartLessonButtonPress = () => {
-    // TODO: fix typing, set correct props on navigation
-    dispatch(setCurrentLessonSection(sectionId));
     navigation.navigate('Camera');
   };
 

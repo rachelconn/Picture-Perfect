@@ -5,7 +5,7 @@ import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
 import { Evaluation, EvaluationCriteria, LessonEvaluationCriteria } from '../../classes/evaluation';
 import Lesson from '../../classes/lesson';
 import { useSelector } from '../../redux/store';
-import { updateSectionStatus } from '../../utils/lessonStatus';
+import { setLessonStatus } from '../../utils/lessonStatus';
 import AnchoredButton from '../common/AnchoredButton/AnchoredButton';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
@@ -66,7 +66,7 @@ const EvaluationPage: React.FC = () => {
       if (allEvaluationsGood) {
         const evaluation: Partial<Record<EvaluationCriteria, number>> = {};
         criteriaToUse.forEach((criteria) => evaluation[criteria] = evaluations.get(criteria)?.value);
-        updateSectionStatus(currentLesson.lesson as Lesson, currentLesson.section as string, {
+        setLessonStatus(currentLesson.lesson as Lesson, {
           completed: true,
           evaluation,
         });

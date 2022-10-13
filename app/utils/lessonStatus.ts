@@ -5,15 +5,12 @@ import  Lesson from '../classes/lesson';
  * Helper functions that manage saving/loading persistent storage like lesson progress and evaluations.
  */
 
-// Status for a section within a lesson
-interface LessonSectionStatus {
+// Status for a single lesson
+export interface LessonStatus {
   completed: boolean;
   submittedPhoto?: string;
   evaluation?: Partial<Record<EvaluationCriteria, number>>;
 };
-
-// Status for an individual lesson: each section has a string name with a corresponding status here
-type LessonStatus = Partial<Record<string, LessonSectionStatus>>;
 
 // Status for all lessons
 type LessonStatusRecords = Partial<Record<Lesson, LessonStatus>>;
@@ -24,14 +21,9 @@ export async function getLessonStatus(): Promise<LessonStatusRecords> {
   });
 }
 
-export function updateSectionStatus(lesson: Lesson, section: string, status: LessonSectionStatus) {
+export function setLessonStatus(lesson: Lesson, status: LessonStatus) {
   getLessonStatus().then((lessonStatusRecords) => {
-    const lessonStatus = lessonStatusRecords[lesson] ?? {};
-
-    // Propagate section status update
-    lessonStatus[section] = status;
-    lessonStatusRecords[lesson] = lessonStatus;
-
+    lessonStatusRecords[lesson] = status;
     AsyncStorage.setItem('LessonStatus', JSON.stringify(lessonStatusRecords));
   });
 }
