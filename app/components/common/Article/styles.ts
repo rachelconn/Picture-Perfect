@@ -36,6 +36,12 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: windowSize.width * 0.03,
   },
+  listedImagesContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   imageCaption: {
     width: windowSize.width * 0.8,
     textAlign: 'center',
