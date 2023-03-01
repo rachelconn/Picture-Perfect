@@ -14,6 +14,10 @@ interface LessonProperties {
 };
 
 const lessons: Record<Lesson, LessonProperties> = {
+  [Lesson.Focus]: {
+    description: "Learn how a camera's focus works and how to manually focus images.",
+    icon: 'image-filter-center-focus',
+  },
   [Lesson.Exposure]: {
     description: 'Learn what exposure is, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
     icon: 'contrast-box',

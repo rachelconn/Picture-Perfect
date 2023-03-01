@@ -5,6 +5,7 @@ import CameraPage from '../../CameraPage/CameraPage';
 import EvaluationPage from '../../EvaluationPage/EvaluationPage';
 import LessonSelectPage from '../../LessonSelectPage/LessonSelectPage';
 import ExposureLesson from '../../Lessons/ExposureLesson';
+import FocusLesson from '../../Lessons/FocusLesson';
 import NavigationContext from './NavigationContext';
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const NavigationStack = () => {
         >
           <Stack.Screen name="LessonSelect" component={LessonSelectPage} />
           <Stack.Screen name="Exposure" component={ExposureLesson} />
+          <Stack.Screen name="Focus" component={FocusLesson} />
           <Stack.Screen name="Camera" component={CameraPage} />
           <Stack.Screen name="Evaluation" component={EvaluationPage} />
         </Stack.Navigator>

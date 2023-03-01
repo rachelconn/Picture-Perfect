@@ -6,6 +6,7 @@ import properlyExposedImage from '../../images/properlyexposed.jpg';
 import noisyImage from '../../images/PLACEHOLDERnoisy.jpg';
 import motionBlurImage from '../../images/PLACEHOLDERmotionblur.jpg';
 import LessonPage from './LessonPage';
+import Lesson from '../../classes/lesson';
 
 const underexposedImageCaption = "This image is underexposed. Despite being taken midday in a bright area, most of the image is very dark, including the sky.";
 const overexposedImageCaption = "This image is overexposed. The sky and road are incredibly bright, and the colors in much of the image are washed out. While parts of the tree and sidewalk are properly exposed, it's important to consider the composition of the photo overall when judging exposure.";
@@ -18,8 +19,8 @@ const blurryImageCaption = "Using an exposure time that's too long will result i
 
 const ExposureLesson: React.FC = () => {
   return (
-    <LessonPage title="Exposure" lessonId="Exposure" sectionId="intro">
-      <Article.SectionHeader>What is exposure?</Article.SectionHeader>
+    <LessonPage title="Exposure" lessonId={Lesson.Exposure}>
+      <Article.SectionHeader>What Is Exposure?</Article.SectionHeader>
       <Article.Paragraph>
         The exposure of a photograph is defined as the amount of light that reaches the camera sensor.
         It may be easier to think of exposure simply as how bright a photograph is— a properly exposed photo tends to have colors close to real life,
