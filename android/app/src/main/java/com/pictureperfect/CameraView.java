@@ -92,6 +92,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 4500);
 					captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
 					captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, 200000000L);
+					captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, 90);
 
 					// Create camera session with request
 					SessionConfiguration sessionConfig = new SessionConfiguration(
@@ -188,8 +189,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				byte[] bytes = new byte[buffer.capacity()];
 				buffer.get(bytes);
 
-				// StringBuilder base64EncodedImage = new StringBuilder("data:image/jpeg;base64,");
-				// base64EncodedImage.append(Base64.encodeToString(bytes, Base64.DEFAULT));
+				// Backend function (tf.io.decode_base64) requires using URL-safe base64
 				promise.resolve(Base64.encodeToString(bytes, Base64.URL_SAFE | Base64.NO_WRAP));
 
 				// Close resources
