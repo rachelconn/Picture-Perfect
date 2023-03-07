@@ -3,7 +3,7 @@ import Lesson from '../../classes/lesson';
 import Article from '../common/Article/index';
 import LessonPage from './LessonPage';
 import bokehImage from '../../images/PLACEHOLDERbokeh.jpg';
-import focusDiagram from '../../images/PLACEHOLDERfocusdiagram.jpg';
+import focusDiagram from '../../images/focusdiagram.png';
 import inFocusImage from '../../images/infocus.jpg';
 import outOfFocusImage from '../../images/outoffocus.jpg';
 import veryOutOfFocusImage from '../../images/veryoutoffocus.jpg';
@@ -12,7 +12,7 @@ import veryOutOfFocusImage from '../../images/veryoutoffocus.jpg';
 const focusExampleImages = [veryOutOfFocusImage, outOfFocusImage, inFocusImage];
 const focusExampleCaption = 'Otherwise identical images taken with varying focal lengths. Notice how better focus lets you see much more detail in the image.';
 const bokehImageCaption = 'This image exhibits bokeh, a photographic style where a blurred background is used to further emphasize the subject.';
-const focusDiagramCaption = 'TODO: finish this!';
+const focusDiagramCaption = 'A diagram showing the plane of focus: depending on the focus settings, the plane can be closer or further from the camera.';
 
 const FocusLesson: React.FC = () => {
   return (
@@ -36,11 +36,16 @@ const FocusLesson: React.FC = () => {
       <Article.Paragraph>
         When taking a photograph, the focus is adjusted by changing the distance between the camera's image plane and lens.
         Depending on this distance, a different area (known as the "plane of focus") will be in perfect focus,
-        and anything outside of the plane of focus will be blurred depending on how far it is from the plane.
-        To make sure an image is in focus, you will need to either adjust the camera's focus distance,
-        or move such that the plane of focus overlaps with your subject.
-      // TODO: diagram
+        and anything outside of the plane of focus will be blurred:
+        objects close to it will only be slightly blurred, while objects far outside of it can become very blurry.
+      </Article.Paragraph>
       <Article.CaptionedImage source={focusDiagram} caption={focusDiagramCaption} />
+      <Article.Paragraph>
+        Adjusting focus is fairly straightforward, as on a smartphone there are only two factors you can control:
+        the camera's focus distance, which determines how far the plane of focus is from the camera,
+        and your distance from objects in the image.
+        Generally, it's a good idea to first get into position for the shot composition that you want,
+        then adjust the focus distance until your subject is in focus.
       </Article.Paragraph>
       <Article.SectionHeader>Your Task</Article.SectionHeader>
       <Article.Paragraph>
