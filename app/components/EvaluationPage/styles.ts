@@ -20,4 +20,19 @@ export default StyleSheet.create({
     backgroundColor: '#000000b0',
     borderRadius: windowSize.width * 0.02,
   },
+  focusCardContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  focusCardColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: windowSize.width * 0.02,
+    alignItems: 'center',
+  },
+  focusCardImage: {
+    width: windowSize.width * 0.4,
+    height: windowSize.width * 0.4 * (3 / 4),
+  },
 });

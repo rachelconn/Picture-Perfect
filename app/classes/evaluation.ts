@@ -10,6 +10,7 @@ export enum EvaluationCriteria {
   Bokeh = 'backgroundBlur',
   WhiteBalance = 'whiteBalance',
   Noise = 'noise',
+  Focus = 'focus',
 };
 
 export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
@@ -17,6 +18,10 @@ export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
     EvaluationCriteria.Exposure,
     EvaluationCriteria.GlobalBlur,
     EvaluationCriteria.Noise,
+    EvaluationCriteria.Focus,
+  ],
+  [Lesson.Focus]: [
+    EvaluationCriteria.Focus,
   ],
 };
 
@@ -78,10 +83,18 @@ function getNoiseFeedback(value: number): EvaluationFeedback {
     };
 }
 
+// TODO: give useful feedback
+function getFocusFeedback(value: string): EvaluationFeedback {
+  return {
+    comment: 'Placeholder.',
+    isGood: true,
+  };
+}
+
 interface EvaluationCriteriaProps {
   name: string,
   // TODO: incorporate camera settings into feedback
-  getFeedback: (value: number) => EvaluationFeedback,
+  getFeedback: (value: any) => EvaluationFeedback,
 };
 
 const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProps> = {
@@ -105,6 +118,10 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
     name: 'Noise',
     getFeedback: getNoiseFeedback,
   },
+  [EvaluationCriteria.Focus]: {
+    name: 'Focus',
+    getFeedback: getFocusFeedback,
+  },
 };
 
 /**
@@ -112,7 +129,7 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
  */
 export class Evaluation {
   #criteria: EvaluationCriteria;
-  #value: number;
+  #value: number | string;
   #feedback?: EvaluationFeedback;
 
   constructor(criteria: EvaluationCriteria, value: number) {
@@ -129,7 +146,7 @@ export class Evaluation {
     return evaluationCriteriaProps[this.#criteria].name;
   }
 
-  public get value(): number {
+  public get value(): number | string {
     return this.#value;
   }
 

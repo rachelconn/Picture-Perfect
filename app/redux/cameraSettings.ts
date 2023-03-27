@@ -51,7 +51,7 @@ const initialState: CameraSettingsState = {
   focusDistance: 0,
   autoExposure: true,
   ISO: 4500,
-  exposureTime: 20000000,
+  exposureTime: 10000000,
   autoWhiteBalance: true,
   whiteBalance: 0.5,
   zoom: 0,

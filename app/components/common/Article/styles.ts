@@ -9,7 +9,7 @@ export default StyleSheet.create({
     position: 'relative',
   },
   sectionHeader: {
-    paddingBottom: windowSize.width * 0.03,
+    paddingTop: windowSize.width * 0.03,
   },
   paragraph: {
     marginLeft: windowSize.width * 0.02,

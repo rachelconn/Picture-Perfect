@@ -9,7 +9,7 @@ import  Lesson from '../classes/lesson';
 export interface LessonStatus {
   completed: boolean;
   submittedPhoto?: string;
-  evaluation?: Partial<Record<EvaluationCriteria, number>>;
+  evaluation?: Partial<Record<EvaluationCriteria, number | string>>;
 };
 
 // Status for all lessons

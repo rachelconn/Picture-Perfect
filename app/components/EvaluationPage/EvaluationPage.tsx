@@ -11,10 +11,16 @@ import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
 import EvaluationCard from './EvaluationCard';
+import FocusEvaluationCard from './FocusEvaluationCard';
 import styles from './styles';
 
 // The format evaluations will be received from the backend
-type BackendPhotoEvaluation = Record<EvaluationCriteria, number>;
+type BackendPhotoEvaluation = {
+  exposure: number,
+  blur: number,
+  noise: number,
+  focus: string,
+};
 // The format evaluations will be converted into for efficiency
 type PhotoEvaluations = Map<EvaluationCriteria, Evaluation>;
 
@@ -36,10 +42,10 @@ const EvaluationPage: React.FC = () => {
   React.useEffect(() => {
     if (!imageURI) return;
 
-    fetch('http://192.168.10.17:8000/eval', {
+    fetch('http://192.168.10.8:8000/eval', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({'image': imageURI}),
+      body: JSON.stringify({image: imageURI}),
     })
     .then((res) => res.json())
     .then((backendEvaluations: BackendPhotoEvaluation) => {
@@ -51,20 +57,28 @@ const EvaluationPage: React.FC = () => {
   }, [imageURI]);
 
   // Show evaluation cards if evaluation is complete, otherwise inform user of loading
-  let pageContent;
   if (evaluations) {
+    const createEvaluationComponent = (evaluation: Evaluation): JSX.Element => {
+      // Special case: focus
+      if (evaluation.criteria === EvaluationCriteria.Focus) {
+        return <FocusEvaluationCard evaluation={evaluation} imageURI={imageURI} key={evaluation.criteria} />;
+      }
+      // Default behavior is an evaluation card
+      return <EvaluationCard evaluation={evaluation} key={evaluation.criteria} />;
+    };
+
     let allEvaluationsGood = true;
     const evaluationCards = criteriaToUse.map((criteria) => {
       const evaluation = evaluations.get(criteria) as Evaluation;
       allEvaluationsGood = allEvaluationsGood && evaluation.feedback.isGood;
-      return <EvaluationCard evaluation={evaluation} key={criteria} />;
+      return createEvaluationComponent(evaluation);
     });
 
     const buttonIcon = allEvaluationsGood ? 'check' : 'refresh';
     const buttonText = allEvaluationsGood ? 'Finish Lesson' : 'Try Again';
     const handleButtonPress = () => {
       if (allEvaluationsGood) {
-        const evaluation: Partial<Record<EvaluationCriteria, number>> = {};
+        const evaluation: Partial<Record<EvaluationCriteria, number | string>> = {};
         criteriaToUse.forEach((criteria) => evaluation[criteria] = evaluations.get(criteria)?.value);
         setLessonStatus(currentLesson.lesson as Lesson, {
           completed: true,

@@ -6,7 +6,7 @@ interface EvaluationCardProps {
   evaluation: Evaluation,
 };
 
-const icon: Record<EvaluationCriteria, string> = {
+const icon: Partial<Record<EvaluationCriteria, string>> = {
   [EvaluationCriteria.Exposure]: 'contrast-box',
   [EvaluationCriteria.GlobalBlur]: 'blur',
   [EvaluationCriteria.Bokeh]: 'image-filter-center-focus',
