@@ -12,6 +12,7 @@ Installation steps are adapted from [the React Native site](https://reactnative.
   ensure that "Android SDK Platform 30" and "Intel x86 Atom_64 System Image" are checked
   - Select "SDK Tools" tab, check "show package details", expand "Android SDK Build-Tools", and
   ensure 30.0.2 is selected
+  - In the same tab, expand the category "NDK (Side by side) and check the box for version 20.1.594894
   - Click apply to download and install the necessary components
 - Configure the ANDROID_HOME environment variable to point to your Android SDK (default location: `%LOCALAPPDATA%/Android/Sdk`)
 `cd src && npm run android`
