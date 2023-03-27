@@ -31,7 +31,6 @@ import com.facebook.react.bridge.Promise;
 import com.pictureperfect.HandlerExecutor;
 import com.pictureperfect.CameraUtils;
 
-// TODO: rotate image to match device orientation
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	CameraManager cameraManager;
@@ -91,8 +90,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					// Set default exposure/focus values to match redux
 					captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 4500);
 					captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
-					captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, 200000000L);
-					captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, 90);
+					captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, 100000000L);
+					// captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, 90);
 
 					// Create camera session with request
 					SessionConfiguration sessionConfig = new SessionConfiguration(
@@ -189,8 +188,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				byte[] bytes = new byte[buffer.capacity()];
 				buffer.get(bytes);
 
-				// Backend function (tf.io.decode_base64) requires using URL-safe base64
-				promise.resolve(Base64.encodeToString(bytes, Base64.URL_SAFE | Base64.NO_WRAP));
+				promise.resolve(Base64.encodeToString(bytes, Base64.NO_WRAP));
 
 				// Close resources
 				captureRequestBuilder.removeTarget(imageReader.getSurface());
