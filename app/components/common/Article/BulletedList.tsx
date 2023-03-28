@@ -4,15 +4,15 @@ import styles from './styles';
 import ListItem from './ListItem';
 import { View } from 'react-native';
 
-interface NumberedListProps {
+interface BulletedListProps {
   children: React.ReactElement[],
 }
 
-const NumberedList: React.FC<NumberedListProps> = ({ children }) => {
+const BulletedList: React.FC<BulletedListProps> = ({ children }) => {
   const listItems = children.map((listItem, idx) => (
     <View style={styles.listItemContainer} key={idx}>
       <Typography style={styles.listItemMarker} variant="bodyMedium">
-        {`${idx + 1}.`}
+        •
       </Typography>
       {listItem}
     </View>
@@ -25,4 +25,4 @@ const NumberedList: React.FC<NumberedListProps> = ({ children }) => {
   );
 };
 
-export default NumberedList;
+export default BulletedList;
