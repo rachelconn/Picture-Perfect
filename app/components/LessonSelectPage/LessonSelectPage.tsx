@@ -22,6 +22,10 @@ const lessons: Record<Lesson, LessonProperties> = {
     description: 'Learn what exposure is, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
     icon: 'contrast-box',
   },
+  [Lesson.LowLight]: {
+    description: 'Learn how to take crisp and well-exposed photos even in low-light environments.',
+    icon: 'weather-night',
+  }
 };
 
 const LessonSelectPage: React.FC = () => {

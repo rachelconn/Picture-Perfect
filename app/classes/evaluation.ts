@@ -14,14 +14,18 @@ export enum EvaluationCriteria {
 };
 
 export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
+  [Lesson.Focus]: [
+    EvaluationCriteria.Focus,
+  ],
   [Lesson.Exposure]: [
     EvaluationCriteria.Exposure,
     EvaluationCriteria.GlobalBlur,
     EvaluationCriteria.Noise,
-    EvaluationCriteria.Focus,
   ],
-  [Lesson.Focus]: [
-    EvaluationCriteria.Focus,
+  [Lesson.LowLight]: [
+    EvaluationCriteria.Exposure,
+    EvaluationCriteria.GlobalBlur,
+    EvaluationCriteria.Noise,
   ],
 };
 
@@ -51,12 +55,18 @@ function getExposureFeedback(value: number): EvaluationFeedback {
   };
 }
 
-// TODO: give useful feedback
+// TODO: need to make sure this distinguishes between motion blur and focal length issues
 function getGlobalBlurFeedback(value: number): EvaluationFeedback {
+  if (value > 0.5) {
     return {
-      comment: 'The entire image is sharp. Well done!',
-      isGood: true,
+      comment: 'Overall, your photo is blurry. Make sure you hold the camera still during the exposure!',
+      isGood: false,
     };
+  }
+  return {
+    comment: 'The entire image is sharp. Well done!',
+    isGood: true,
+  };
 }
 
 // TODO: give useful feedback
