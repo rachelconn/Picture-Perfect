@@ -72,9 +72,11 @@ const ExposureLesson: React.FC = () => {
         <Article.ListItem>Adjust ISO to a value that leads to proper exposure with your chosen exposure time</Article.ListItem>
         <Article.ListItem>Take a photo, adjusting the appropriate setting if there's digital noise or smearing</Article.ListItem>
       </Article.NumberedList>
+      <Article.SectionHeader>Your Task</Article.SectionHeader>
       <Article.Paragraph>
-        Now that you know what settings are responsible for adjusting exposure and what proper exposure look like, it's time to practice taking well-exposed photos!
-        Go into a well-lit room and find any subject you're interested in photographing, then try to take a well-exposed picture.
+        Now that you know what settings are responsible for adjusting exposure and what proper exposure look like,
+        it's time to practice getting the right exposure in your own photos!
+        Go into a well-lit room and find any subject you're interested in photographing, then try to take a properly exposed picture.
         Once you take the photo, we'll rate your photo and let you know how you did.
       </Article.Paragraph>
     </LessonPage>

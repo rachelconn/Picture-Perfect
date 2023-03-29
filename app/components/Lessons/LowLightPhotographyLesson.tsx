@@ -22,7 +22,7 @@ const LowLightPhotographyLesson: React.FC = () => {
         In this lesson, we'll discuss some of the challenges that come with these low-light environments,
         and how to adjust your camera to create vivid photos in them.
       </Article.Paragraph>
-      <Article.SectionHeader>Challenges of low-light photography</Article.SectionHeader>
+      <Article.SectionHeader>Challenges of Low-Light Photography</Article.SectionHeader>
       <Article.Paragraph>
         While you should always take noise and motion blur into account when taking a photo,
         low-light conditions can exacerbate these issues.
@@ -41,7 +41,7 @@ const LowLightPhotographyLesson: React.FC = () => {
         as longer exposure times can lead to motion blur due to moving the camera during the exposure.
         Consider taking steps to keep your camera steady and keep your photos sharp.
       </Article.Paragraph>
-      <Article.SectionHeader>Steadying your camera</Article.SectionHeader>
+      <Article.SectionHeader>Steadying Your Camera</Article.SectionHeader>
       <Article.Paragraph>
         The simplest way to ensure a sharp image would be to use a tripod:
         this should hold your camera completely still, and ensure that there's no shakiness when taking a photo.
