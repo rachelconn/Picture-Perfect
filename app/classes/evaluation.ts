@@ -5,12 +5,12 @@ import Lesson from './lesson';
  * Note that the names match those used by the backend, not user-friendly display names.
  */
 export enum EvaluationCriteria {
-  Exposure = 'exposure',
   GlobalBlur = 'blur',
-  Bokeh = 'backgroundBlur',
-  WhiteBalance = 'whiteBalance',
-  Noise = 'noise',
+  Bokeh = 'bokeh',
+  Exposure = 'exposure',
   Focus = 'focus',
+  Noise = 'noise',
+  // WhiteBalance = 'whiteBalance',
 };
 
 export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
@@ -70,20 +70,20 @@ function getGlobalBlurFeedback(value: number): EvaluationFeedback {
 }
 
 // TODO: give useful feedback
-function getBackgroundBlurFeedback(value: number): EvaluationFeedback {
+function getBokehFeedback(value: number): EvaluationFeedback {
     return {
       comment: 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!',
       isGood: true,
     };
 }
 
-// TODO: give useful feedback
-function getWhiteBalanceFeedback(value: number): EvaluationFeedback {
-    return {
-      comment: 'Your image has proper white balance, and the tones look natural.',
-      isGood: true,
-    };
-}
+// // TODO: give useful feedback
+// function getWhiteBalanceFeedback(value: number): EvaluationFeedback {
+//     return {
+//       comment: 'Your image has proper white balance, and the tones look natural.',
+//       isGood: true,
+//     };
+// }
 
 // TODO: give useful feedback
 function getNoiseFeedback(value: number): EvaluationFeedback {
@@ -118,12 +118,12 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
   },
   [EvaluationCriteria.Bokeh]: {
     name: 'Bokeh',
-    getFeedback: getBackgroundBlurFeedback,
+    getFeedback: getBokehFeedback,
   },
-  [EvaluationCriteria.WhiteBalance]: {
-    name: 'White Balance',
-    getFeedback: getWhiteBalanceFeedback,
-  },
+  // [EvaluationCriteria.WhiteBalance]: {
+  //   name: 'White Balance',
+  //   getFeedback: getWhiteBalanceFeedback,
+  // },
   [EvaluationCriteria.Noise]: {
     name: 'Noise',
     getFeedback: getNoiseFeedback,
@@ -142,7 +142,7 @@ export class Evaluation {
   #value: number | string;
   #feedback?: EvaluationFeedback;
 
-  constructor(criteria: EvaluationCriteria, value: number) {
+  constructor(criteria: EvaluationCriteria, value: number | string) {
     this.#criteria = criteria;
     this.#value = value;
   }

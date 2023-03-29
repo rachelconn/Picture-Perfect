@@ -15,12 +15,8 @@ import FocusEvaluationCard from './FocusEvaluationCard';
 import styles from './styles';
 
 // The format evaluations will be received from the backend
-type BackendPhotoEvaluation = {
-  exposure: number,
-  blur: number,
-  noise: number,
-  focus: string,
-};
+type BackendPhotoEvaluation = Record<EvaluationCriteria, number | string>;
+
 // The format evaluations will be converted into for efficiency
 type PhotoEvaluations = Map<EvaluationCriteria, Evaluation>;
 
