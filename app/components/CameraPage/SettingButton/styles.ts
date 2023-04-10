@@ -1,25 +1,28 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-const sliderWidth = Dimensions.get('window').height * 0.2;
+const windowSize = Dimensions.get('window');
+const sliderWidth = windowSize.height * 0.2;
 const sliderHeight = 40;
 const sliderPadding = 12;
 const settingButtonSize = 56;
 export const autoToggleSize = 24;
 
 export default StyleSheet.create({
-  settingButtonContainer: {
-    width: settingButtonSize,
-    height: settingButtonSize,
+  settingButtonTouchable: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column',
+    minWidth: settingButtonSize,
+    height: settingButtonSize,
+    padding: 4,
     transform: [{ rotate: '90deg'}],
     position: 'relative',
+    zIndex: 2,
   },
   sliderContainer: {
     position: 'absolute',
-    left: settingButtonSize + 8,
+    left: settingButtonSize + 36,
     display: 'flex',
     flexDirection: 'row',
     width: sliderWidth + sliderPadding * 2 + autoToggleSize + 8,
@@ -27,6 +30,7 @@ export default StyleSheet.create({
     borderRadius: 6,
     padding: sliderPadding,
     height: sliderHeight,
+    zIndex: 1,
   },
   slider: {
     width: sliderWidth,
@@ -34,5 +38,8 @@ export default StyleSheet.create({
   },
   autoToggle: {
     justifyContent: 'center',
+  },
+  nameText: {
+    textAlign: 'center',
   },
 });

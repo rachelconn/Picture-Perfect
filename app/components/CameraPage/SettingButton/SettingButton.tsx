@@ -19,6 +19,8 @@ export type AdjustableCameraSetting = (
 );
 
 interface SettingProps {
+  // Display-friendly name for the setting (if it should be displayed)
+  name?: string,
   // Icon to use for setting button
   icon: JSX.Element,
   // Redux action to set the new value
@@ -43,6 +45,7 @@ const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
     unit: '',
   },
   [CameraSetting.ExposureTime]: {
+    name: 'Exposure Time',
     icon: <MaterialCommunityIcons name="camera-iris" color="white" size={24} />,
     setter: setExposureTime,
     autoSetting: CameraSetting.AutoExposure,
@@ -51,6 +54,7 @@ const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
     unit: 's',
   },
   [CameraSetting.FocusDistance]: {
+    name: 'Focus',
     icon: <MaterialCommunityIcons name="image-filter-center-focus" color="white" size={24} />,
     setter: setFocusDistance,
     autoSetting: CameraSetting.AutoFocus,
@@ -107,7 +111,7 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
   const expand = () => Animated.timing(animation, { toValue: 1, duration: 300, useNativeDriver: false }).start();
   const collapse = () => Animated.timing(animation, { toValue: 0, duration: 300, useNativeDriver: false }).start();
   const touchableStyle = {
-    ...styles.settingButtonContainer,
+    ...styles.settingButtonTouchable,
     backgroundColor: animation.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.5)'],
@@ -137,8 +141,15 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
     </View>
   ) : null;
 
+  const nameText = props.name ? (
+    <Typography style={styles.nameText} variant="bodySmall" color="white">
+      {props.name}
+    </Typography>
+  ) : undefined;
+
   return (
     <AnimatedPressable style={touchableStyle} onPress={handleButtonPress}>
+      {nameText}
       {props.icon}
       <Typography variant="bodySmall" color="white">
         {formatValue(value, props.unit, isAuto, props.formattedMultiplier)}
