@@ -17,6 +17,7 @@ const CaptionedImage: React.FC<CaptionedImageProps> = ({ caption, source }) => {
   const imageStyle = {
     width: renderWidth,
     height: height / width * renderWidth,
+    marginBottom: windowSize.width * 0.01,
   }
 
   return (
