@@ -33,6 +33,8 @@ interface SettingProps {
   unit: string,
   // Multiplier to use for the raw setting value when displaying to user (default 1)
   formattedMultiplier?: number,
+  // Whether or not to scale slider values logarithmically
+  logarithmic?: boolean,
 };
 
 // TODO: add white balance once implemented
@@ -52,6 +54,7 @@ const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
     getRange: getAvailableExposureTimes,
     formattedMultiplier: 1 / 1000000000,
     unit: 's',
+    logarithmic: true,
   },
   [CameraSetting.FocusDistance]: {
     name: 'Focus',
@@ -78,12 +81,17 @@ export interface SettingButtonProps {
 };
 
 function formatValue(value: number, unit: string, isAuto: boolean, formattedMultiplier = 1) {
+  // Format number
   if (isAuto) return 'AUTO';
   value = value * formattedMultiplier;
-  let displayValue;
-  if (value % 1 === 0) displayValue = value;
-  else if (Math.abs(value) < 100) displayValue = value.toFixed(2);
-  else displayValue = Math.round(value);
+
+  // Determine decimal places to print
+  let sigFigs = 0;
+  if (value !== 0 && Math.abs(value) < 100) sigFigs = Math.max(1, Math.round(-Math.log10(Math.abs(value))) + 1);
+
+  // Calculate value to print
+  console.log(value, sigFigs)
+  const displayValue = value.toFixed(sigFigs);
   return displayValue + unit;
 };
 
@@ -133,7 +141,7 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
   const slider = (expanded && range) ? (
     <View style={styles.sliderContainer}>
       <View style={styles.slider}>
-        <Slider value={value} range={range} onChange={handleSliderChange} />
+        <Slider value={value} range={range} onChange={handleSliderChange} logarithmic={props.logarithmic} />
       </View>
       <View style={styles.autoToggle}>
         <SettingAutoToggle setting={props.autoSetting} size={autoToggleSize} />
