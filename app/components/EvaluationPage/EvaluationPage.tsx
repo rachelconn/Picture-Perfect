@@ -102,10 +102,12 @@ const EvaluationPage: React.FC = () => {
       </PageWithAppbar>
     );
   }
+
+  // Content to render before evaluation is complete
   return (
     <PageWithAppbar title="Evaluation">
       <Portal>
-        <Modal visible style={styles.loadingModal}>
+        <Modal visible style={styles.loadingModal} onDismiss={() => navigation.goBack()}>
           <View style={styles.loadingModalContent}>
             <ActivityIndicator size="large" color="white" />
             <Typography variant="bodyMedium" color="white">
