@@ -19,13 +19,17 @@ const lessons: Record<Lesson, LessonProperties> = {
     icon: 'image-filter-center-focus',
   },
   [Lesson.Exposure]: {
-    description: 'Learn what exposure is, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
+    description: 'Learn what exposure means, how to judge the exposure of photos, and how to use it to make your images true-to-life.',
     icon: 'contrast-box',
   },
   [Lesson.LowLight]: {
     description: 'Learn how to take crisp and well-exposed photos even in low-light environments.',
     icon: 'weather-night',
-  }
+  },
+  [Lesson.Bokeh]: {
+    description: 'Learn what bokeh is and how to use it to take more interesting photos.',
+    icon: 'blur',
+  },
 };
 
 const LessonSelectPage: React.FC = () => {

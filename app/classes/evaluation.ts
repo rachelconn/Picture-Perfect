@@ -27,6 +27,10 @@ export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
     EvaluationCriteria.GlobalBlur,
     EvaluationCriteria.Noise,
   ],
+  [Lesson.Bokeh]: [
+    EvaluationCriteria.Bokeh,
+    EvaluationCriteria.Focus,
+  ],
 };
 
 interface EvaluationFeedback {

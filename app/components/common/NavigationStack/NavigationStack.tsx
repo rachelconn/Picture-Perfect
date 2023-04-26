@@ -9,6 +9,7 @@ import FocusLesson from '../../Lessons/FocusLesson';
 import NavigationContext from './NavigationContext';
 import LowLightPhotographyLesson from '../../Lessons/LowLightPhotographyLesson';
 import Lesson from '../../../classes/lesson';
+import BokehLesson from '../../Lessons/BokehLesson';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,7 @@ export type LessonSelectPageNavigationProp = NativeStackNavigationProp<RootStack
 export type CameraPageNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Camera'>;
 export type EvaluationPageNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Evaluation'>;
 
-const NavigationStack = () => {
+const NavigationStack: React.FC = () => {
   const [imageURI, setImageURI] = React.useState('');
 
   return (
@@ -37,6 +38,7 @@ const NavigationStack = () => {
           <Stack.Screen name={Lesson.Focus} component={FocusLesson} />
           <Stack.Screen name={Lesson.Exposure} component={ExposureLesson} />
           <Stack.Screen name={Lesson.LowLight} component={LowLightPhotographyLesson} />
+          <Stack.Screen name={Lesson.Bokeh} component={BokehLesson} />
           <Stack.Screen name="Camera" component={CameraPage} />
           <Stack.Screen name="Evaluation" component={EvaluationPage} />
         </Stack.Navigator>
