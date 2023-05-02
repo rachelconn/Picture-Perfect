@@ -27,7 +27,7 @@ const CardBase: React.FC<CardBaseProps> = ({ onPress, children }) => {
   }
 
   return (
-    <View style={styles.cardcontainer}>
+    <View style={styles.cardContainer}>
       {cardContent}
     </View>
   );
