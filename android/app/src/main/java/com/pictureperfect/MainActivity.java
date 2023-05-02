@@ -1,9 +1,12 @@
 package com.pictureperfect;
 
 import android.os.Bundle;
+import expo.modules.ReactActivityDelegateWrapper;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
 public class MainActivity extends ReactActivity {
 
@@ -22,7 +25,12 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
-    return new MainActivityDelegate(this, getMainComponentName());
+    return new ReactActivityDelegateWrapper(this, BuildConfig.IS_NEW_ARCHITECTURE_ENABLED, new DefaultReactActivityDelegate(
+		this,
+		getMainComponentName(),
+		DefaultNewArchitectureEntryPoint.getFabricEnabled(),
+		DefaultNewArchitectureEntryPoint.getConcurrentReactEnabled()
+	));
   }
 
   public static class MainActivityDelegate extends ReactActivityDelegate {
