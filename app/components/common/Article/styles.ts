@@ -36,11 +36,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: windowSize.width * 0.03,
   },
+  focusedImageContainer: {
+    backgroundColor: '#000000b0',
+  },
   listedImagesContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+  },
+  listedImageContainer: {
+    margin: windowSize.width * 0.01,
   },
   imageCaption: {
     width: windowSize.width * 0.8,
