@@ -1,6 +1,7 @@
 import React from 'react';
-import { Dimensions, Image, View } from 'react-native';
+import { View } from 'react-native';
 import Typography from '../Typography/Typography';
+import ImageBase from './ImageBase';
 import styles from './styles';
 
 interface CaptionedImageListProps {
@@ -11,18 +12,11 @@ interface CaptionedImageListProps {
 const CaptionedImageList: React.FC<CaptionedImageListProps> = ({ caption, sources }) => {
   const captionElement = caption && <Typography variant="caption" style={styles.imageCaption}>{caption}</Typography>;
 
-  const windowSize = Dimensions.get('window');
-  const imageRenderWidth = windowSize.width * 0.4;
-
-  const images: JSX.Element[] = sources.map((source) => {
-    const { height, width } = Image.resolveAssetSource(source);
-    const imageStyle = {
-      width: imageRenderWidth,
-      height: (height / width) * imageRenderWidth,
-      margin: windowSize.width * 0.01,
-    };
-    return <Image style={imageStyle} source={source} resizeMode="cover" key={source} />;
-  });
+  const images: JSX.Element[] = sources.map((source) => (
+    <View style={styles.listedImageContainer}>
+      <ImageBase source={source} widthRatio={0.4} key={source} />
+    </View>
+  ));
 
   return (
     <View style={styles.imageContainer}>
