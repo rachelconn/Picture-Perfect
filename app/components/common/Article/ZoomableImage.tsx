@@ -1,7 +1,14 @@
 import React from 'react';
 import {
   Dimensions,
-  Image, ImageSourcePropType, ImageStyle, NativeTouchEvent, PanResponder, StyleProp, View, ViewStyle,
+  Image,
+  ImageSourcePropType,
+  ImageStyle,
+  NativeTouchEvent,
+  PanResponder,
+  StyleProp,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { clamp } from '../../../utils/math';
 
@@ -17,6 +24,7 @@ interface ZoomableImageProps {
   initialScale?: number;
   minScale?: number;
   maxScale?: number;
+  onPress?: () => any;
   source: ImageSourcePropType;
   style?: ZoomableImageStyle;
 }
@@ -28,6 +36,11 @@ interface Point {
 
 interface ZoomableImageState {
   scale: number;
+  top: number,
+  left: number,
+  offsetTop: number,
+  offsetLeft: number,
+  isDragging: boolean,
   numTouches?: number,
   touchCenter?: Point,
   touchDistance?: number,
@@ -48,44 +61,65 @@ function calculateTouchCenter(touches: NativeTouchEvent[]): Point {
   return { x: sumOfTouches.x / touches.length, y: sumOfTouches.y / touches.length };
 }
 
-
 // Component
 const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
-  const [state, setState] = React.useState<ZoomableImageState>({
-    scale: props.initialScale ?? 1,
-  });
   const windowSize = Dimensions.get('window');
+  const initialScale = props.initialScale ?? 1;
 
-  function handleSingleTouch(touches: NativeTouchEvent[]) {
+  const [state, setState] = React.useState<ZoomableImageState>({
+    scale: initialScale,
+    top: (windowSize.height - props.imageHeight * initialScale) / 2,
+    left: (windowSize.width - props.imageWidth * initialScale) / 2,
+    offsetTop: 0,
+    offsetLeft: 0,
+    isDragging: false,
+  });
+
+  // Modifies newState in-place to apply panning (assumes that newState.touchCenter has already been updated)
+  function applyPanning(newState: ZoomableImageState) {
+    const dx = newState.touchCenter!.x - state.touchCenter!.x;
+    const dy = newState.touchCenter!.y - state.touchCenter!.y;
+    const overflowX = Math.max(0, props.imageWidth * newState.scale - windowSize.width);
+    const overflowY = Math.max(0, props.imageHeight * newState.scale - windowSize.height);
+    newState.offsetTop = clamp(state.offsetTop + dy, -overflowY / 2, overflowY / 2);
+    newState.offsetLeft = clamp(state.offsetLeft + dx, -overflowX / 2, overflowX / 2);
+  }
+
+  function handleSingleTouchMove(touches: NativeTouchEvent[]) {
+    const touch = touches[0]
     const newState: ZoomableImageState = { ...state };
-    newState.numTouches = touches.length;
+    newState.numTouches = 1;
+    newState.touchCenter = { x: touch.pageX, y: touch.pageY };
 
     // TODO: pan depending on new touch position
-    if (touches.length === state.numTouches) {
-
+    if (touches.length === state.numTouches && state.touchCenter) {
+      applyPanning(newState);
     }
 
+    newState.isDragging = true;
     setState(newState);
   }
 
-  function handleMultiTouch(touches: NativeTouchEvent[]) {
+  function handleMultiTouchMove(touches: NativeTouchEvent[]) {
     const newState: ZoomableImageState = { ...state };
     newState.numTouches = touches.length;
-
-    // Handle panning based on touch center point
-    newState.touchCenter = calculateTouchCenter(touches);
-    // TODO: pan depending on new touch center
-    if (state.touchCenter && touches.length === state.numTouches) {
-
-    }
 
     // Handle zooming based on touch distance
     newState.touchDistance = calculateDistance(touches[0], touches[1]);
     if (state.touchDistance && touches.length === state.numTouches) {
       const unclampedNewScale = newState.touchDistance / state.touchDistance * state.scale;
       newState.scale = clamp(unclampedNewScale, props.minScale ?? 0, props.maxScale ?? Infinity);
+      newState.top = (windowSize.height - props.imageHeight * newState.scale) / 2;
+      newState.left = (windowSize.width - props.imageWidth * newState.scale) / 2;
     }
 
+    // Handle panning based on touch center point
+    newState.touchCenter = calculateTouchCenter(touches);
+    if (state.touchCenter && touches.length === state.numTouches) {
+      applyPanning(newState);
+    }
+
+    newState.isDragging = true;
     setState(newState);
   }
 
@@ -99,12 +133,16 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
           numTouches: 0,
           touchCenter: undefined,
           touchDistance: undefined,
+          isDragging: false,
         });
       },
-      onPanResponderMove: (event, _gestureState) => {
+      onPanResponderMove: (event) => {
         const touches = event.nativeEvent.touches;
-        if (touches.length > 1) handleMultiTouch(touches);
-        else if (touches.length === 1) handleSingleTouch(touches);
+        if (touches.length > 1) handleMultiTouchMove(touches);
+        else if (touches.length === 1) handleSingleTouchMove(touches);
+      },
+      onPanResponderEnd() {
+          if (props.onPress && !state.isDragging) props.onPress();
       },
     })
   ), [state]);
@@ -114,12 +152,13 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
   const scaledImageHeight = props.imageHeight * state.scale;
   const imageStyle: StyleProp<ImageStyle> = {
     position: 'absolute',
-    top: (windowSize.height - scaledImageHeight) / 2,
-    left: (windowSize.width - scaledImageWidth) / 2,
+    top: state.top + state.offsetTop,
+    left: state.left + state.offsetLeft,
     width: scaledImageWidth,
     height: scaledImageHeight,
   }
 
+  // TODO: detect back press
   return (
     <View style={props.style} {...panResponder.panHandlers}>
       <Image style={imageStyle} source={props.source} />
