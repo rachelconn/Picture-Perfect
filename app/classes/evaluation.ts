@@ -1,33 +1,47 @@
 import Lesson from './lesson';
 
-/**
- * Evaluation criteria avaiable from the evaluation backend.
- * Note that the names match those used by the backend, not user-friendly display names.
- */
+// Criteria for lessons to evaluate
 export enum EvaluationCriteria {
-  GlobalBlur = 'blur',
-  Bokeh = 'bokeh',
-  Exposure = 'exposure',
-  Focus = 'focus',
-  Noise = 'noise',
-  // WhiteBalance = 'whiteBalance',
+  Blur = 'Blur',
+  Bokeh = 'Bokeh',
+  Exposure = 'Exposure',
+  Focus = 'Focus',
+  Noise = 'Noise',
+};
+
+export enum BlurType {
+  Sharp = 0,
+  MotionBlur = 1,
+  OutOfFocus = 2,
+};
+
+// Raw evaluation numbers from the backend
+export interface BackendPhotoEvaluation {
+  blurType: BlurType,
+  bokeh: number,
+  exposure: number,
+  focus: string,
+  noise: number,
+  percentInFocus: number,
 };
 
 export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
   [Lesson.Focus]: [
+    EvaluationCriteria.Blur,
     EvaluationCriteria.Focus,
   ],
   [Lesson.Exposure]: [
+    EvaluationCriteria.Blur,
     EvaluationCriteria.Exposure,
-    EvaluationCriteria.GlobalBlur,
     EvaluationCriteria.Noise,
   ],
   [Lesson.LowLight]: [
+    EvaluationCriteria.Blur,
     EvaluationCriteria.Exposure,
-    EvaluationCriteria.GlobalBlur,
     EvaluationCriteria.Noise,
   ],
   [Lesson.Bokeh]: [
+    EvaluationCriteria.Blur,
     EvaluationCriteria.Bokeh,
     EvaluationCriteria.Focus,
   ],
@@ -38,18 +52,21 @@ interface EvaluationFeedback {
   isGood: boolean,
 };
 
-// Helpers for Evaluation class
-function getExposureFeedback(value: number): EvaluationFeedback {
+
+/**
+ * Helpers for Evaluation class
+ */
+function getExposureFeedback({ exposure }: BackendPhotoEvaluation): EvaluationFeedback {
   // TODO: use min/max ISO/shutter time values to guide feedback
-  if (value > 0.5) {
+  if (exposure > 0.6) {
     return {
       comment: 'The image you took is overexposed. Try decreasing your ISO or shutter time.',
       isGood: false,
     };
   }
-  if (value < -0.5) {
+  if (exposure < -0.6) {
     return {
-      comment: 'The image you took is underexposed. If your photo is stationary or slow-moving, increase your shutter time. If you notice blurred objects, instead increase your ISO.',
+      comment: 'The image you took is underexposed. If objects in your photo are stationary or slow-moving, increase your shutter time. If you notice blurred objects, instead increase your ISO.',
       isGood: false,
     };
   }
@@ -60,21 +77,30 @@ function getExposureFeedback(value: number): EvaluationFeedback {
 }
 
 // TODO: need to make sure this distinguishes between motion blur and focal length issues
-function getGlobalBlurFeedback(value: number): EvaluationFeedback {
-  if (value > 0.5) {
+function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation): EvaluationFeedback {
+  if (blurType === BlurType.MotionBlur) {
     return {
-      comment: 'Overall, your photo is blurry. Make sure you hold the camera still during the exposure!',
+      comment: 'Your photo seems to suffer from motion blur. Try keeping your camera steady with techniques like controlling your breathing, placing your camera on a stable surface, or keeping your elbows tucked into your body.',
       isGood: false,
     };
   }
-  return {
-    comment: 'The entire image is sharp. Well done!',
-    isGood: true,
-  };
+  if (blurType === BlurType.OutOfFocus) {
+    return {
+      comment: "Your photo isn't properly focused on the subject. Try adjusting it by starting with the focal distance at either the minimum or maximum value, then slowly adjust until you see the subject become sharper.",
+      isGood: false,
+    }
+  }
+  if (blurType === BlurType.Sharp) {
+    return {
+      comment: "Your photo doesn't seem to have motion blur, and the focus is clear and sharp. Great job!",
+      isGood: true,
+    };
+  }
+  throw Error(`Undefined blur type: ${blurType}. Make sure the API output is correct.`);
 }
 
 // TODO: give useful feedback
-function getBokehFeedback(value: number): EvaluationFeedback {
+function getBokehFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
     return {
       comment: 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!',
       isGood: true,
@@ -90,7 +116,7 @@ function getBokehFeedback(value: number): EvaluationFeedback {
 // }
 
 // TODO: give useful feedback
-function getNoiseFeedback(value: number): EvaluationFeedback {
+function getNoiseFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
     return {
       comment: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
       isGood: true,
@@ -98,7 +124,7 @@ function getNoiseFeedback(value: number): EvaluationFeedback {
 }
 
 // TODO: give useful feedback
-function getFocusFeedback(value: string): EvaluationFeedback {
+function getFocusFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
   return {
     comment: 'Placeholder.',
     isGood: true,
@@ -108,7 +134,7 @@ function getFocusFeedback(value: string): EvaluationFeedback {
 interface EvaluationCriteriaProps {
   name: string,
   // TODO: incorporate camera settings into feedback
-  getFeedback: (value: any) => EvaluationFeedback,
+  getFeedback: (evaluations: BackendPhotoEvaluation) => EvaluationFeedback,
 };
 
 const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProps> = {
@@ -116,18 +142,14 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
     name: 'Exposure',
     getFeedback: getExposureFeedback,
   },
-  [EvaluationCriteria.GlobalBlur]: {
+  [EvaluationCriteria.Blur]: {
     name: 'Blur',
-    getFeedback: getGlobalBlurFeedback,
+    getFeedback: getBlurTypeFeedback,
   },
   [EvaluationCriteria.Bokeh]: {
     name: 'Bokeh',
     getFeedback: getBokehFeedback,
   },
-  // [EvaluationCriteria.WhiteBalance]: {
-  //   name: 'White Balance',
-  //   getFeedback: getWhiteBalanceFeedback,
-  // },
   [EvaluationCriteria.Noise]: {
     name: 'Noise',
     getFeedback: getNoiseFeedback,
@@ -143,12 +165,12 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
  */
 export class Evaluation {
   #criteria: EvaluationCriteria;
-  #value: number | string;
+  #evaluations: BackendPhotoEvaluation;
   #feedback?: EvaluationFeedback;
 
-  constructor(criteria: EvaluationCriteria, value: number | string) {
+  constructor(criteria: EvaluationCriteria, evaluations: BackendPhotoEvaluation) {
     this.#criteria = criteria;
-    this.#value = value;
+    this.#evaluations = evaluations;
   }
 
   public get criteria(): EvaluationCriteria {
@@ -160,16 +182,17 @@ export class Evaluation {
     return evaluationCriteriaProps[this.#criteria].name;
   }
 
-  public get value(): number | string {
-    return this.#value;
-  }
-
   // Returns feedback for the criteria based on its value
   public get feedback(): EvaluationFeedback {
     // Cache feedback to avoid recalculating
     if (!this.#feedback) {
-      this.#feedback = evaluationCriteriaProps[this.#criteria].getFeedback(this.value);
+      this.#feedback = evaluationCriteriaProps[this.#criteria].getFeedback(this.#evaluations);
     }
     return this.#feedback;
+  }
+
+  // Returns raw feedback values in case they are needed for other logic
+  public get rawValues(): BackendPhotoEvaluation {
+    return this.#evaluations;
   }
 }

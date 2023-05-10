@@ -9,6 +9,7 @@ export interface IconCardProps {
   title: string,
   description: string,
   icon: string,
+  titleColor?: string,
   titleIcon?: string,
   titleIconColor?: string,
   onPress?: () => any,
@@ -20,6 +21,7 @@ const IconCard: React.FC<IconCardProps> = ({
   title,
   description,
   icon,
+  titleColor,
   titleIcon,
   titleIconColor,
   onPress,
@@ -37,7 +39,7 @@ const IconCard: React.FC<IconCardProps> = ({
         <View style={styles.textContainer}>
           <View style={styles.titleContainer}>
             {titleIconComponent}
-            <Typography variant="title">{title}</Typography>
+            <Typography variant="title" color={titleColor}>{title}</Typography>
           </View>
           <Typography variant="bodyMedium">{description}</Typography>
         </View>

@@ -1,18 +1,20 @@
 import React from 'react';
 import { Image, View } from 'react-native';
-import { Evaluation, EvaluationCriteria } from '../../classes/evaluation';
+import { Evaluation } from '../../classes/evaluation';
 import CardBase from '../common/IconCard/CardBase';
+import NavigationContext from '../common/NavigationStack/NavigationContext';
 import Typography from '../common/Typography/Typography';
 import styles from './styles';
 
 interface FocusEvaluationCardProps {
   evaluation: Evaluation,
-  imageURI: string,
 };
 
-const FocusEvaluationCard: React.FC<FocusEvaluationCardProps> = ({ evaluation, imageURI }) => {
+const FocusEvaluationCard: React.FC<FocusEvaluationCardProps> = ({ evaluation }) => {
+  const { imageURI } = React.useContext(NavigationContext);
+
   const imageBase64 = `data:image/jpeg;base64,${imageURI.replace(/_/g, '/').replace(/-/g, '+')}`
-  const focusBase64 = `data:image/png;base64,${evaluation.value as string}`
+  const focusBase64 = `data:image/png;base64,${evaluation.rawValues.focus}`
 
   return (
     <CardBase>

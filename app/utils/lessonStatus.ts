@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EvaluationCriteria } from '../classes/evaluation';
+import { BackendPhotoEvaluation, EvaluationCriteria } from '../classes/evaluation';
 import  Lesson from '../classes/lesson';
 /**
  * Helper functions that manage saving/loading persistent storage like lesson progress and evaluations.
@@ -9,7 +9,7 @@ import  Lesson from '../classes/lesson';
 export interface LessonStatus {
   completed: boolean;
   submittedPhoto?: string;
-  evaluation?: Partial<Record<EvaluationCriteria, number | string>>;
+  evaluation?: BackendPhotoEvaluation;
 };
 
 // Status for all lessons

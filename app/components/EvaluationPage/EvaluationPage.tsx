@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Modal, Portal, Text } from 'react-native-paper';
-import { Evaluation, EvaluationCriteria, LessonEvaluationCriteria } from '../../classes/evaluation';
+import { BackendPhotoEvaluation, BlurType, Evaluation, EvaluationCriteria, LessonEvaluationCriteria } from '../../classes/evaluation';
 import Lesson from '../../classes/lesson';
 import { useSelector } from '../../redux/store';
 import { setLessonStatus } from '../../utils/lessonStatus';
@@ -11,28 +11,21 @@ import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
 import EvaluationCard from './EvaluationCard';
-import FocusEvaluationCard from './FocusEvaluationCard';
 import styles from './styles';
 
-// The format evaluations will be received from the backend
-type BackendPhotoEvaluation = Record<EvaluationCriteria, number | string>;
-
-// The format evaluations will be converted into for efficiency
-type PhotoEvaluations = Map<EvaluationCriteria, Evaluation>;
-
-const defaultCriteria = [
+const defaultCriteria: EvaluationCriteria[] = [
   EvaluationCriteria.Exposure,
-  EvaluationCriteria.GlobalBlur,
+  EvaluationCriteria.Blur,
   EvaluationCriteria.Noise,
 ];
 
 const EvaluationPage: React.FC = () => {
   const navigation = useNavigation();
   const { imageURI } = React.useContext(NavigationContext);
-  const [evaluations, setEvaluations] = React.useState<PhotoEvaluations>();
+  const [evaluations, setEvaluations] = React.useState<Evaluation[]>();
   const currentLesson = useSelector((state) => state.currentLesson);
 
-  const criteriaToUse = currentLesson.lesson ? LessonEvaluationCriteria[currentLesson.lesson] : defaultCriteria;
+  const criteriaToUse: EvaluationCriteria[] = currentLesson.lesson ? LessonEvaluationCriteria[currentLesson.lesson] : defaultCriteria;
 
   // Get photo evaluation when URI is updated
   React.useEffect(() => {
@@ -41,44 +34,32 @@ const EvaluationPage: React.FC = () => {
     fetch('http://192.168.10.8:8000/eval', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({image: imageURI}),
+      body: JSON.stringify({ image: imageURI }),
     })
     .then((res) => res.json())
     .then((backendEvaluations: BackendPhotoEvaluation) => {
-      const evaluations: PhotoEvaluations = new Map(Object.entries(backendEvaluations).map(([criteria, value]) => {
-        return [criteria as EvaluationCriteria, new Evaluation(criteria as EvaluationCriteria, value)];
-      }));
-      setEvaluations(evaluations);
+      const newEvaluations = Object.values(EvaluationCriteria)
+        .filter((criteria) => criteriaToUse.includes(criteria))
+        .map((criteria) => new Evaluation(criteria, backendEvaluations));
+      setEvaluations(newEvaluations);
     });
   }, [imageURI]);
 
   // Show evaluation cards if evaluation is complete, otherwise inform user of loading
   if (evaluations) {
-    const createEvaluationComponent = (evaluation: Evaluation): JSX.Element => {
-      // Special case: focus
-      if (evaluation.criteria === EvaluationCriteria.Focus) {
-        return <FocusEvaluationCard evaluation={evaluation} imageURI={imageURI} key={evaluation.criteria} />;
-      }
-      // Default behavior is an evaluation card
-      return <EvaluationCard evaluation={evaluation} key={evaluation.criteria} />;
-    };
-
     let allEvaluationsGood = true;
-    const evaluationCards = criteriaToUse.map((criteria) => {
-      const evaluation = evaluations.get(criteria) as Evaluation;
+    const evaluationCards = evaluations.map((evaluation) => {
       allEvaluationsGood = allEvaluationsGood && evaluation.feedback.isGood;
-      return createEvaluationComponent(evaluation);
+      return <EvaluationCard evaluation={evaluation} key={evaluation.criteria} />
     });
 
     const buttonIcon = allEvaluationsGood ? 'check' : 'refresh';
     const buttonText = allEvaluationsGood ? 'Finish Lesson' : 'Try Again';
     const handleButtonPress = () => {
       if (allEvaluationsGood) {
-        const evaluation: Partial<Record<EvaluationCriteria, number | string>> = {};
-        criteriaToUse.forEach((criteria) => evaluation[criteria] = evaluations.get(criteria)?.value);
         setLessonStatus(currentLesson.lesson as Lesson, {
           completed: true,
-          evaluation,
+          evaluation: evaluations[0].rawValues,
         });
         navigation.navigate('LessonSelect');
       }
@@ -102,22 +83,23 @@ const EvaluationPage: React.FC = () => {
       </PageWithAppbar>
     );
   }
-
-  // Content to render before evaluation is complete
-  return (
-    <PageWithAppbar title="Evaluation">
-      <Portal>
-        <Modal visible style={styles.loadingModal} onDismiss={() => navigation.goBack()}>
-          <View style={styles.loadingModalContent}>
-            <ActivityIndicator size="large" color="white" />
-            <Typography variant="bodyMedium" color="white">
-              Evaluating...
-            </Typography>
-          </View>
-        </Modal>
-      </Portal>
-    </PageWithAppbar>
-  );
+  else {
+    // Content to render before evaluation is complete
+    return (
+      <PageWithAppbar title="Evaluation">
+        <Portal>
+          <Modal visible style={styles.loadingModal} onDismiss={() => navigation.goBack()}>
+            <View style={styles.loadingModalContent}>
+              <ActivityIndicator size="large" color="white" />
+              <Typography variant="bodyMedium" color="white">
+                Evaluating...
+              </Typography>
+            </View>
+          </Modal>
+        </Portal>
+      </PageWithAppbar>
+    );
+  }
 };
 
 export default EvaluationPage;
