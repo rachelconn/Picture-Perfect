@@ -13,8 +13,8 @@ const CaptionedImageList: React.FC<CaptionedImageListProps> = ({ caption, source
   const captionElement = caption && <Typography variant="caption" style={styles.imageCaption}>{caption}</Typography>;
 
   const images: JSX.Element[] = sources.map((source) => (
-    <View style={styles.listedImageContainer}>
-      <ImageBase source={source} widthRatio={0.4} key={source} />
+    <View style={styles.listedImageContainer} key={source}>
+      <ImageBase source={source} widthRatio={0.4} />
     </View>
   ));
 
