@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dimensions, GestureResponderEvent, Image, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
-import ImageZoom, { ICenterOn } from 'react-native-image-pan-zoom';
-import { Modal, Portal } from 'react-native-paper';
+import { Dimensions, Image, TouchableHighlight } from 'react-native';
+import { Portal } from 'react-native-paper';
 import styles from './styles';
+import ZoomableImage from './ZoomableImage';
 
 interface ImageBaseProps {
   source: any;
@@ -13,49 +13,40 @@ interface ImageBaseProps {
 const ImageBase: React.FC<ImageBaseProps> = ({ source, widthRatio }) => {
   const [focused, setFocused] = React.useState(false);
 
-  const { height, width } = Image.resolveAssetSource(source);
+  // Get image dimensions
+  const { width: imageWidth, height: imageHeight } = Image.resolveAssetSource(source);
   const windowSize = Dimensions.get('window');
+
+  // Calculate inline image styles
   const renderWidth = windowSize.width * widthRatio;
-  const imageWidth = renderWidth;
-  const imageHeight = height / width * renderWidth;
-  const imageStyle = {
-    width: imageWidth,
-    height: imageHeight,
+  const inlineImageWidth = renderWidth;
+  const inlineImageHeight = imageHeight / imageWidth * renderWidth;
+  const inlineImageStyle = {
+    width: inlineImageWidth,
+    height: inlineImageHeight,
   };
-
-  const imageComponent = <Image style={imageStyle} source={source} resizeMode="cover" />;
-
-  const defaultScale = windowSize.width / imageWidth
-
-  const imageCenter: ICenterOn = {
-    x: 0,
-    y: 0,
-    scale: defaultScale,
-    duration: 0,
-  };
+  const inlineImageComponent = <Image style={inlineImageStyle} source={source} resizeMode="cover" />;
 
   // Render full screen zoomable/pannable image when focused
+  const initialScale = windowSize.width / imageWidth;
   return focused ? (
     <>
-      {imageComponent}
+      {inlineImageComponent}
       <Portal>
-        <ImageZoom
-          style={styles.focusedImageContainer}
-          cropWidth={windowSize.width}
-          cropHeight={windowSize.height}
+        <ZoomableImage
           imageWidth={imageWidth}
           imageHeight={imageHeight}
-          maxScale={defaultScale * 1.5}
-          centerOn={imageCenter}
-          onClick={() => setFocused(false)}
-        >
-          {imageComponent}
-        </ImageZoom>
+          initialScale={initialScale}
+          minScale={initialScale}
+          maxScale={initialScale * 3}
+          source={source}
+          style={styles.focusedImageContainer}
+        />
       </Portal>
     </>
   ) : (
     <TouchableHighlight onPress={() => setFocused(true)}>
-      {imageComponent}
+      {inlineImageComponent}
     </TouchableHighlight>
   );
 };

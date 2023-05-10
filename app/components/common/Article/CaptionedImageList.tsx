@@ -1,12 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
+import { ImageSourcePropType } from 'react-native/Libraries/Image/Image';
 import Typography from '../Typography/Typography';
 import ImageBase from './ImageBase';
 import styles from './styles';
 
 interface CaptionedImageListProps {
   caption?: string,
-  sources: any[],
+  sources: ImageSourcePropType[],
 }
 
 const CaptionedImageList: React.FC<CaptionedImageListProps> = ({ caption, sources }) => {

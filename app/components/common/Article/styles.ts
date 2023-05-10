@@ -34,10 +34,12 @@ export default StyleSheet.create({
     flexDirection: 'column',
     width: windowSize.width,
     alignItems: 'center',
-    paddingTop: windowSize.width * 0.03,
+    marginTop: windowSize.width * 0.03,
   },
   focusedImageContainer: {
     backgroundColor: '#000000b0',
+    width: windowSize.width,
+    height: windowSize.height,
   },
   listedImagesContainer: {
     display: 'flex',
