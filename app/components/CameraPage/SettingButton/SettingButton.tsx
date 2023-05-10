@@ -90,7 +90,6 @@ function formatValue(value: number, unit: string, isAuto: boolean, formattedMult
   if (value !== 0 && Math.abs(value) < 100) sigFigs = Math.max(1, Math.round(-Math.log10(Math.abs(value))) + 1);
 
   // Calculate value to print
-  console.log(value, sigFigs)
   const displayValue = value.toFixed(sigFigs);
   return displayValue + unit;
 };
