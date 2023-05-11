@@ -99,31 +99,44 @@ function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation): EvaluationFe
   throw Error(`Undefined blur type: ${blurType}. Make sure the API output is correct.`);
 }
 
-// TODO: give useful feedback
 function getBokehFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+  if (evaluations.bokeh > 0.65 || (evaluations.percentInFocus >= 20 && evaluations.percentInFocus <= 70)) {
     return {
       comment: 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!',
       isGood: true,
     };
-}
-
-// // TODO: give useful feedback
-// function getWhiteBalanceFeedback(value: number): EvaluationFeedback {
-//     return {
-//       comment: 'Your image has proper white balance, and the tones look natural.',
-//       isGood: true,
-//     };
-// }
-
-// TODO: give useful feedback
-function getNoiseFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+  }
+  if (evaluations.percentInFocus > 70) {
     return {
-      comment: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
-      isGood: true,
+      comment: 'Too much of the image is in focus for a striking bokeh effect. Try using some of the tips you learned in the lesson to make it so more of the background is blurred.',
+      isGood: false,
     };
+  }
+  if (evaluations.percentInFocus < 20) {
+    return {
+      comment: "Most of the image seems to be out of focus. It might help to use forced perspective to get your subject far away from the background, then adjusting your focal length so that the subject is sharp but the background is blurry.",
+      isGood: false,
+    };
+  }
+  throw Error(`Evaluations:\n${evaluations}\n  Unhandled evaluation values for bokeh feedback. See above for details about the evaluations given.`);
+}
+
+function getNoiseFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+  // TODO: might want to adjust threshold based on accuracy of the model
+  if (evaluations.noise > 0.4) {
+    return {
+      comment: "Your photo is fairly noisy. Using a lower ISO value in combination with a longer exposure time in order to reduce noise artifacts, and use some of the techniques you've learned to avoid motion blur.",
+      isGood: false,
+    };
+  }
+  return {
+    comment: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
+    isGood: true,
+  };
 }
 
 // TODO: give useful feedback
+// TODO: is this necessary? Focus should be used in conjuction with blur type feedback to provide text while this gives an image to see what areas are in focus
 function getFocusFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
   return {
     comment: 'Placeholder.',

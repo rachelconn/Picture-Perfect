@@ -59,6 +59,7 @@ const BokehLesson: React.FC = () => {
         With a traditional camera, this can be done relatively easily by making the aperture more narrow,
         meaning that objects even slightly outside the plane of focus can be heavily blurred.
         However, with a phone camera you'll have to create this
+        {/* TODO: finish explanation! */}
       <Article.SectionHeader>Your Task</Article.SectionHeader>
     </LessonPage>
   );
