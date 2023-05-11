@@ -22,10 +22,14 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({ evaluation }) => {
   }
 
   // Generate title based on criteria
-  let title = evaluation.name;
-  if (evaluation.criteria === EvaluationCriteria.Exposure) title = title.concat(`: ${evaluation.rawValues.exposure.toFixed(1)}`)
-
   // TODO: show value as necessary
+  let title = evaluation.name;
+  if (evaluation.criteria === EvaluationCriteria.Exposure) {
+    let formattedExposure = evaluation.rawValues.exposure.toFixed(1);
+    if (formattedExposure[0] !== '-') formattedExposure = `+${formattedExposure}`;
+    title = title.concat(`: ${formattedExposure}`)
+  }
+
   return (
     <IconCard
       title={title}
