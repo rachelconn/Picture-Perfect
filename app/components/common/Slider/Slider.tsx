@@ -19,7 +19,7 @@ interface SliderProps {
 };
 
 // TODO: gray out progress bar when auto is being used? remove entirely?
-// TODO: currently only works when vertical due to how PanResponder handles event locations
+// (potential) TODO: currently only works when vertical due to how PanResponder handles event locations, change if adding rotation
 const Slider: React.FC<SliderProps> = ({
   value: valueProp,
   range,

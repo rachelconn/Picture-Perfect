@@ -37,7 +37,7 @@ interface SettingProps {
   logarithmic?: boolean,
 };
 
-// TODO: add white balance once implemented
+// (potential) TODO: if white balance is implemented, add white balance setting here
 const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
   [CameraSetting.ISO]: {
     icon: <Typography variant="bodyLarge" color="white">ISO</Typography>,
@@ -61,7 +61,6 @@ const cameraSettingProps: Record<AdjustableCameraSetting, SettingProps> = {
     icon: <MaterialCommunityIcons name="image-filter-center-focus" color="white" size={24} />,
     setter: setFocusDistance,
     autoSetting: CameraSetting.AutoFocus,
-    // TODO: range correct?
     getRange: getAvailableFocusDistances,
     unit: '',
   },
@@ -94,7 +93,7 @@ function formatValue(value: number, unit: string, isAuto: boolean, formattedMult
   return displayValue + unit;
 };
 
-// TODO: rotate button with device
+// (potential) TODO: if adding rotation, rotate button with device
 const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }) => {
   const dispatch = useDispatch();
 
@@ -132,7 +131,6 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
     newExpanded ? expand() : collapse();
   };
 
-  // TODO: debounce updates
   const handleSliderChange = (newValue: number) => {
     dispatch(props.setter(newValue));
   };

@@ -8,7 +8,6 @@ import inFocusImage from '../../images/infocus.jpg';
 import outOfFocusImage from '../../images/outoffocus.jpg';
 import veryOutOfFocusImage from '../../images/veryoutoffocus.jpg';
 
-// TODO: fill in text
 const focusExampleImages = [veryOutOfFocusImage, outOfFocusImage, inFocusImage];
 const focusExampleCaption = 'Otherwise identical images taken with varying focal lengths. Notice how better focus lets you see much more detail in the image.';
 const bokehImageCaption = 'This image exhibits bokeh, a photographic style where a blurred background is used to further emphasize the subject.';

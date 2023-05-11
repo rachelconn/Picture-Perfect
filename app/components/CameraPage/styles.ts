@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-// TODO: need to calculate this on each render rather than statically here
+// (potential) TODO: if adding rotation, need to calculate this on each render rather than statically here
 const windowSize = Dimensions.get('window');
 // Lock to 4:3 aspect ratio and center vertically
 const cameraWidth = windowSize.width;

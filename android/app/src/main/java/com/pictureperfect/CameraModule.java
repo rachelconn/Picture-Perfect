@@ -39,7 +39,7 @@ public class CameraModule extends ReactContextBaseJavaModule {
 		return cameraManager.getCameraCharacteristics(CameraUtils.getRearCameraId(cameraManager));
 	}
 
-	// TODO: use WritableArrays instead of strings for sending ranges to frontend
+	// (potential) TODO: Could use WritableArrays instead of strings for sending ranges to frontend
 
 	@ReactMethod
 	public void getAvailableISOValues(final Promise promise) {
@@ -74,13 +74,8 @@ public class CameraModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-	public void getAvailableWhiteBalanceValues() {
-		// TODO: need to manually adjust white balance, it's not in the camera2 API
-	}
-
-	@ReactMethod
 	public void getAvailableZoomValues(final Promise promise) {
-		// TODO: graceful fallback when CONTROL_ZOOM_RATIO_RANGE not supported
+		// if supporting more devices, try adding graceful fallback when CONTROL_ZOOM_RATIO_RANGE not supported
 		// Range<Float> values = getCameraCharacteristics().get(CameraCharacteristics.CONTROL_ZOOM_RATIO_RANGE);
 		WritableNativeArray ret = new WritableNativeArray();
 		ret.pushDouble(0.0);

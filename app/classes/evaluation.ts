@@ -76,7 +76,6 @@ function getExposureFeedback({ exposure }: BackendPhotoEvaluation): EvaluationFe
   };
 }
 
-// TODO: need to make sure this distinguishes between motion blur and focal length issues
 function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation): EvaluationFeedback {
   if (blurType === BlurType.MotionBlur) {
     return {

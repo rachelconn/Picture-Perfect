@@ -158,9 +158,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		return captureSession;
 	}
 
-	// TODO: add mutex lock?
-	// TODO: add null checks
-	// TODO: add better error handling
+	// (potential) TODO: seems to work fine, but I have concerns about asynchronous writes, null values, and error handling
 	public void updateSettings(Map<CaptureRequest.Key, Object> settings) {
 		// Update corresponding settings
 		for (Map.Entry<CaptureRequest.Key, Object> setting : settings.entrySet()) {
@@ -199,8 +197,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 		try {
 			captureRequestBuilder.addTarget(imageReader.getSurface());
-
-			// TODO: need to set rotation?
 			captureSession.capture(captureRequestBuilder.build(), null, cameraHandler);
 		}
 		catch (CameraAccessException e) {

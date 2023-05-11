@@ -4,7 +4,7 @@ import Article from '../common/Article/index';
 import LessonPage from './LessonPage';
 import Lesson from '../../classes/lesson';
 
-// TODO: add pictures and examples!
+// TODO: add more pictures and examples!
 
 const noisyPhotoCaption = 'This image is very noisy due to a high ISO value being used to compensate for dim lighting.';
 

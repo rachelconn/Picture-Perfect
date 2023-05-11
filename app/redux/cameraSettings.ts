@@ -57,7 +57,6 @@ const initialState: CameraSettingsState = {
   zoom: 0,
 };
 
-// TODO: make each of these settings call camera module functions
 export const cameraSettingsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setAutoFocus, (state, action) => {
@@ -85,6 +84,7 @@ export const cameraSettingsReducer = createReducer(initialState, (builder) => {
       state.autoExposure = false;
     })
     .addCase(setAutoWhiteBalance, (state, action) => {
+      // (potential) TODO: if adding wb, make this do something (same with setWhiteBalance)
       state.autoWhiteBalance = action.payload;
     })
     .addCase(setWhiteBalance, (state, action) => {

@@ -14,9 +14,6 @@ const properlyExposedImageCaption = "This image is properly exposed. The colors 
 const noisyImageCaption = "Notice how the photo in this example looks grainy, like it was taken with an antique camera. This is due to the ISO value being set too high, creating digital noise.";
 const blurryImageCaption = "Using an exposure time that's too long will result in an image like this, where fast-moving objects blur due to their movement within the shutter time of the camera.";
 
-// TODO: bring up intentional over/underexposure
-// "In addition, you can manually under- or overexpose an image to achieve interesting visual effects -> have a couple example images"
-
 const ExposureLesson: React.FC = () => {
   return (
     <LessonPage title="Exposure" lessonId={Lesson.Exposure}>

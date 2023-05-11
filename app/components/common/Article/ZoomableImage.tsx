@@ -91,7 +91,6 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
     newState.numTouches = 1;
     newState.touchCenter = { x: touch.pageX, y: touch.pageY };
 
-    // TODO: pan depending on new touch position
     if (touches.length === state.numTouches && state.touchCenter) {
       applyPanning(newState);
     }
@@ -147,7 +146,6 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
     })
   ), [state]);
 
-  // TODO: set top and left to respond to panning
   const scaledImageWidth = props.imageWidth * state.scale;
   const scaledImageHeight = props.imageHeight * state.scale;
   const imageStyle: StyleProp<ImageStyle> = {
