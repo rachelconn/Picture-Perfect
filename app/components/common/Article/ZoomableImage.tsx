@@ -82,7 +82,11 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
     if (!props.onBackButtonPress) return;
 
     // Use cache so that cleanup function doesn't think onBackButtonPress could be undefined
-    const cachedOnBackButtonPress = props.onBackButtonPress;
+    const cachedOnBackButtonPress = () => {
+      if (props.onBackButtonPress) props.onBackButtonPress();
+      // Return true to overwrite default back button behavior
+      return true;
+    };
 
     BackHandler.addEventListener('hardwareBackPress', cachedOnBackButtonPress);
     return () => {
