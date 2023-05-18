@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  BackHandler,
   Dimensions,
   Image,
   ImageSourcePropType,
@@ -25,6 +26,7 @@ interface ZoomableImageProps {
   minScale?: number;
   maxScale?: number;
   onPress?: () => any;
+  onBackButtonPress?: () => any;
   source: ImageSourcePropType;
   style?: ZoomableImageStyle;
 }
@@ -74,6 +76,19 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
     offsetLeft: 0,
     isDragging: false,
   });
+
+  // Add event listener for back button press as needed
+  React.useEffect(() => {
+    if (!props.onBackButtonPress) return;
+
+    // Use cache so that cleanup function doesn't think onBackButtonPress could be undefined
+    const cachedOnBackButtonPress = props.onBackButtonPress;
+
+    BackHandler.addEventListener('hardwareBackPress', cachedOnBackButtonPress);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', cachedOnBackButtonPress);
+    };
+  }, []);
 
   // Modifies newState in-place to apply panning (assumes that newState.touchCenter has already been updated)
   function applyPanning(newState: ZoomableImageState) {

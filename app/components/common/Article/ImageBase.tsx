@@ -48,6 +48,7 @@ const ImageBase: React.FC<ImageBaseProps> = ({ source, widthRatio, imageSize }) 
           source={source}
           style={styles.focusedImageContainer}
           onPress={() => setFocused(false)}
+          onBackButtonPress={() => setFocused(false)}
         />
       </Portal>
     </>
