@@ -56,7 +56,7 @@ interface EvaluationFeedback {
 /**
  * Helpers for Evaluation class
  */
-function getExposureFeedback({ exposure }: BackendPhotoEvaluation): EvaluationFeedback {
+function getExposureFeedback({ exposure }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
   // TODO: use min/max ISO/shutter time values to guide feedback
   if (exposure > 0.6) {
     return {
@@ -76,17 +76,27 @@ function getExposureFeedback({ exposure }: BackendPhotoEvaluation): EvaluationFe
   };
 }
 
-function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation): EvaluationFeedback {
+const blurLessons = new Set<Lesson>([Lesson.Focus, Lesson.Bokeh]);
+function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
   if (blurType === BlurType.MotionBlur) {
     return {
       comment: 'Your photo seems to suffer from motion blur. Try keeping your camera steady with techniques like controlling your breathing, placing your camera on a stable surface, or keeping your elbows tucked into your body.',
       isGood: false,
     };
   }
+  // Only evaluate out of focus blur as incorrect if the lesson teaches blur
   if (blurType === BlurType.OutOfFocus) {
-    return {
-      comment: "Your photo isn't properly focused on the subject. Try adjusting it by starting with the focal distance at either the minimum or maximum value, then slowly adjust until you see the subject become sharper.",
-      isGood: false,
+    if (blurLessons.has(lesson)) {
+      return {
+        comment: "Your photo isn't properly focused on the subject. Try adjusting it by starting with the focal distance at either the minimum or maximum value, then slowly adjust until you see the subject become sharper.",
+        isGood: false,
+      }
+    }
+    else {
+      return {
+        comment: "Although it's not the point of this lesson, you might want to know that your image is out of focus. Try looking at the focus or bokeh lessons for more information on how to improve!",
+        isGood: true,
+      };
     }
   }
   if (blurType === BlurType.Sharp) {
@@ -98,7 +108,7 @@ function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation): EvaluationFe
   throw Error(`Undefined blur type: ${blurType}. Make sure the API output is correct.`);
 }
 
-function getBokehFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+function getBokehFeedback(evaluations: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
   if (evaluations.bokeh > 0.65 || (evaluations.percentInFocus >= 20 && evaluations.percentInFocus <= 70)) {
     return {
       comment: 'The subject is in focus, while the background is blurred. Nice job emphasizing the subject!',
@@ -120,7 +130,7 @@ function getBokehFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedba
   throw Error(`Evaluations:\n${evaluations}\n  Unhandled evaluation values for bokeh feedback. See above for details about the evaluations given.`);
 }
 
-function getNoiseFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+function getNoiseFeedback(evaluations: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
   // TODO: might want to adjust threshold based on accuracy of the model
   if (evaluations.noise > 0.4) {
     return {
@@ -136,7 +146,7 @@ function getNoiseFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedba
 
 // TODO: give useful feedback
 // TODO: is this necessary? Focus should be used in conjuction with blur type feedback to provide text while this gives an image to see what areas are in focus
-function getFocusFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedback {
+function getFocusFeedback(evaluations: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
   return {
     comment: 'Placeholder.',
     isGood: true,
@@ -146,7 +156,7 @@ function getFocusFeedback(evaluations: BackendPhotoEvaluation): EvaluationFeedba
 interface EvaluationCriteriaProps {
   name: string,
   // TODO: incorporate camera settings into feedback
-  getFeedback: (evaluations: BackendPhotoEvaluation) => EvaluationFeedback,
+  getFeedback: (evaluations: BackendPhotoEvaluation, lesson: Lesson) => EvaluationFeedback,
 };
 
 const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProps> = {
@@ -178,11 +188,13 @@ const evaluationCriteriaProps: Record<EvaluationCriteria, EvaluationCriteriaProp
 export class Evaluation {
   #criteria: EvaluationCriteria;
   #evaluations: BackendPhotoEvaluation;
+  #lesson: Lesson | undefined;
   #feedback?: EvaluationFeedback;
 
-  constructor(criteria: EvaluationCriteria, evaluations: BackendPhotoEvaluation) {
+  constructor(criteria: EvaluationCriteria, evaluations: BackendPhotoEvaluation, lesson: Lesson | undefined) {
     this.#criteria = criteria;
     this.#evaluations = evaluations;
+    this.#lesson = lesson;
   }
 
   public get criteria(): EvaluationCriteria {
@@ -198,7 +210,7 @@ export class Evaluation {
   public get feedback(): EvaluationFeedback {
     // Cache feedback to avoid recalculating
     if (!this.#feedback) {
-      this.#feedback = evaluationCriteriaProps[this.#criteria].getFeedback(this.#evaluations);
+      this.#feedback = evaluationCriteriaProps[this.#criteria].getFeedback(this.#evaluations, this.#lesson);
     }
     return this.#feedback;
   }

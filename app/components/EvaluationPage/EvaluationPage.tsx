@@ -40,7 +40,7 @@ const EvaluationPage: React.FC = () => {
     .then((backendEvaluations: BackendPhotoEvaluation) => {
       const newEvaluations = Object.values(EvaluationCriteria)
         .filter((criteria) => criteriaToUse.includes(criteria))
-        .map((criteria) => new Evaluation(criteria, backendEvaluations));
+        .map((criteria) => new Evaluation(criteria, backendEvaluations, currentLesson.lesson));
       setEvaluations(newEvaluations);
     });
   }, [imageURI]);
