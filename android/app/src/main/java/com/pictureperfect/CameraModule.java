@@ -111,6 +111,15 @@ public class CameraModule extends ReactContextBaseJavaModule {
 		));
 	}
 
+	@ReactMethod
+	public void setAutoExposure(boolean enabled) {
+		Integer CONTROL_AE_MODE = enabled ? CameraMetadata.CONTROL_AE_MODE_ON : CameraMetadata.CONTROL_AE_MODE_OFF;
+
+		changeCameraSettings(Map.of(
+			CaptureRequest.CONTROL_AE_MODE, CONTROL_AE_MODE
+		));
+	}
+
 	// Expected input range: [0, 1], where 0 means focus as close as possible and 1 means as far as possible
 	// Input must be transformed into the appropriate value based on camera characteristics.
 	@ReactMethod

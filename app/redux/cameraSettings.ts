@@ -37,9 +37,9 @@ interface CameraSettingsState {
   zoom: number,
 }
 
+export const setAutoExposure = createAction<boolean>('settings/autoExposure/set');
 export const setAutoFocus = createAction<boolean>('settings/autoFocus/set');
 export const setFocusDistance = createAction<number>('settings/focusDistance/set');
-export const setAutoExposure = createAction<boolean>('settings/autoExposure/set');
 export const setISO = createAction<number>('settings/iso/set');
 export const setExposureTime = createAction<number>('settings/exposureTime/set');
 export const setAutoWhiteBalance = createAction<boolean>('settings/autoWhiteBalance/set');
@@ -69,6 +69,7 @@ export const cameraSettingsReducer = createReducer(initialState, (builder) => {
       state.autoFocus = false;
     })
     .addCase(setAutoExposure, (state, action) => {
+      CameraModule.setAutoExposure(action.payload);
       state.autoExposure = action.payload;
     })
     .addCase(setISO, (state, action) => {

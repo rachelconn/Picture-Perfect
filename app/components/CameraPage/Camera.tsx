@@ -1,5 +1,4 @@
-import React from 'react';
-import { requireNativeComponent, View } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 export interface CameraProps {
   style: any;
