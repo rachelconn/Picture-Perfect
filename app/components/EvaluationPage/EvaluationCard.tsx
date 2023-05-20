@@ -33,7 +33,7 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({ evaluation }) => {
   return (
     <IconCard
       title={title}
-      titleColor={evaluation.feedback.isGood ? '#00d466' : '#ff0000'}
+      titleColor={evaluation.feedback.isGood ? 'black' : '#ff0000'}
       description={evaluation.feedback.comment}
       icon={icon[evaluation.criteria]}
     />
