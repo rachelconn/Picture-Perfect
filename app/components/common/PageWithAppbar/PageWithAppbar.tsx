@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Appbar, useTheme } from 'react-native-paper';
 import FocusAwareStatusBar from '../FocusAwareStatusBar/FocusAwareStatusBar';
 import styles from './styles';

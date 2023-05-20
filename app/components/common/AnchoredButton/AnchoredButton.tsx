@@ -1,12 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import styles from './styles';
 
-interface AnchoredButtonProps {
+export interface AnchoredButtonProps {
   icon: string,
   mode: 'text' | 'outlined' | 'contained' | undefined,
   children: string,
+  color?: string,
   onPress: () => any,
 };
 
@@ -14,6 +14,7 @@ const AnchoredButton: React.FC<AnchoredButtonProps> = ({
   icon,
   mode,
   children,
+  color,
   onPress,
 }) => {
   return (
@@ -21,6 +22,7 @@ const AnchoredButton: React.FC<AnchoredButtonProps> = ({
       icon={icon}
       mode={mode}
       style={styles.anchoredButton}
+      color={color}
       contentStyle={styles.anchoredButtonContent}
       onPress={onPress}
     >
