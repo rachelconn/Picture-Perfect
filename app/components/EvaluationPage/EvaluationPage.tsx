@@ -6,7 +6,7 @@ import { BackendPhotoEvaluation, BlurType, Evaluation, EvaluationCriteria, Lesso
 import Lesson from '../../classes/lesson';
 import { useSelector } from '../../redux/store';
 import { setLessonStatus } from '../../utils/lessonStatus';
-import AnchoredButton from '../common/AnchoredButton/AnchoredButton';
+import AnchoredButtonColumn, { ColumnButtonProps } from '../common/AnchoredButton/AnchoredButtonColumn';
 import NavigationContext from '../common/NavigationStack/NavigationContext';
 import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
@@ -47,38 +47,42 @@ const EvaluationPage: React.FC = () => {
 
   // Show evaluation cards if evaluation is complete, otherwise inform user of loading
   if (evaluations) {
+    // Create evaluation cards, determine whether all evaluations are positive
     let allEvaluationsGood = true;
     const evaluationCards = evaluations.map((evaluation) => {
       allEvaluationsGood = allEvaluationsGood && evaluation.feedback.isGood;
       return <EvaluationCard evaluation={evaluation} key={evaluation.criteria} />
     });
 
-    const buttonIcon = allEvaluationsGood ? 'check' : 'refresh';
-    const buttonText = allEvaluationsGood ? 'Finish Lesson' : 'Try Again';
-    const handleButtonPress = () => {
-      if (allEvaluationsGood) {
-        setLessonStatus(currentLesson.lesson as Lesson, {
-          completed: true,
-          evaluation: evaluations[0].rawValues,
-        });
-        navigation.navigate('LessonSelect');
-      }
-      else {
-        navigation.goBack();
-      }
+    // Create navigation buttons
+    const handleContinueButtonPress = () => {
+      setLessonStatus(currentLesson.lesson as Lesson, {
+        completed: true,
+        evaluation: evaluations[0].rawValues,
+      });
+      navigation.navigate('LessonSelect');
     };
-    const navigationButton = (
-      <AnchoredButton
-        icon={buttonIcon}
-        mode="contained"
-        onPress={handleButtonPress}
-      >
-        {buttonText}
-      </AnchoredButton>
-    );
+
+    const buttons: ColumnButtonProps[] = [{
+      icon: 'check',
+      mode: 'contained',
+      onPress: handleContinueButtonPress,
+      text: allEvaluationsGood ? 'Finish Lesson' : 'Force Completion',
+      color: allEvaluationsGood ? undefined : '#ed4337',
+    }];
+    if (!allEvaluationsGood) {
+      buttons.push({
+        icon: 'refresh',
+        mode: 'contained',
+        onPress: () => navigation.goBack(),
+        text: 'Try Again',
+      });
+    }
+
+    const navigationButtons = <AnchoredButtonColumn buttons={buttons} />;
 
     return (
-      <PageWithAppbar title="Evaluation" staticContent={navigationButton}>
+      <PageWithAppbar title="Evaluation" staticContent={navigationButtons}>
         {evaluationCards}
       </PageWithAppbar>
     );
