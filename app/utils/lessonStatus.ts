@@ -21,8 +21,8 @@ export async function getLessonStatus(): Promise<LessonStatusRecords> {
   });
 }
 
-export function setLessonStatus(lesson: Lesson, status: LessonStatus) {
-  getLessonStatus().then((lessonStatusRecords) => {
+export function setLessonStatus(lesson: Lesson, status: LessonStatus): Promise<void> {
+  return getLessonStatus().then((lessonStatusRecords) => {
     lessonStatusRecords[lesson] = status;
     AsyncStorage.setItem('LessonStatus', JSON.stringify(lessonStatusRecords));
   });

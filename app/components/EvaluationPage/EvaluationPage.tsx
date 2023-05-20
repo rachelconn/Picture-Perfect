@@ -59,8 +59,8 @@ const EvaluationPage: React.FC = () => {
       setLessonStatus(currentLesson.lesson as Lesson, {
         completed: true,
         evaluation: evaluations[0].rawValues,
-      });
-      navigation.navigate('LessonSelect');
+      })
+        .then(() => navigation.navigate('LessonSelect'));
     };
 
     const buttons: ColumnButtonProps[] = [{
