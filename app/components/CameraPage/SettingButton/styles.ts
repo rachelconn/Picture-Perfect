@@ -32,6 +32,9 @@ export default StyleSheet.create({
     height: sliderHeight,
     zIndex: 1,
   },
+  sliderContainerAutoDisabled: {
+    width: sliderWidth + sliderPadding * 2 + 8,
+  },
   slider: {
     width: sliderWidth,
     justifyContent: 'center',

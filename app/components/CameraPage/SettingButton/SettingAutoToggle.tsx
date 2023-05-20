@@ -1,14 +1,15 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import React from 'react';
-import { Button, IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { CameraSetting, setAutoExposure, setAutoFocus, setAutoWhiteBalance } from '../../../redux/cameraSettings';
 import { useDispatch, useSelector } from '../../../redux/store';
 
-export type AutoCameraSetting = (
-  CameraSetting.AutoExposure
-  | CameraSetting.AutoFocus
-  | CameraSetting.AutoWhiteBalance
-);
+export const autoCameraSettings = [
+  CameraSetting.AutoExposure,
+  CameraSetting.AutoFocus,
+  CameraSetting.AutoWhiteBalance,
+] as const;
+export type AutoCameraSetting = typeof autoCameraSettings[number];
 
 interface AutoSettingProps {
   setter: ActionCreatorWithPayload<any>,
@@ -16,7 +17,7 @@ interface AutoSettingProps {
   manualIcon: string,
 };
 
-const autoSettingProps: Record<AutoCameraSetting, AutoSettingProps> = {
+export const autoSettingProps: Record<AutoCameraSetting, AutoSettingProps> = {
   [CameraSetting.AutoExposure]: {
     setter: setAutoExposure,
     autoIcon: "brightness-auto",

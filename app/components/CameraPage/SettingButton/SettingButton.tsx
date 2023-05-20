@@ -76,7 +76,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export interface SettingButtonProps {
   setting: AdjustableCameraSetting,
-  enabled?: Boolean,
+  autoOnlySettings: AutoCameraSetting[],
+  manualOnlySettings: AutoCameraSetting[],
 };
 
 function formatValue(value: number, unit: string, isAuto: boolean, formattedMultiplier = 1) {
@@ -94,7 +95,7 @@ function formatValue(value: number, unit: string, isAuto: boolean, formattedMult
 };
 
 // (potential) TODO: if adding rotation, rotate button with device
-const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }) => {
+const SettingButton: React.FC<SettingButtonProps> = ({ setting, autoOnlySettings, manualOnlySettings }) => {
   const dispatch = useDispatch();
 
   const props = cameraSettingProps[setting];
@@ -111,6 +112,12 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
       setRange(calculatedRange)
     });
   }, []);
+
+  // Disable if setting is auto-only
+  const disabled = autoOnlySettings.includes(props.autoSetting);
+  const color = disabled ? '#999' : 'white';
+  // Gray out icon when disabled
+  const icon = disabled ? React.cloneElement(props.icon, { color: '#999' }) : props.icon;
 
   // Transition background color on touch
   const animation = React.useRef(new Animated.Value(0)).current;
@@ -135,28 +142,36 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, enabled = true }
     dispatch(props.setter(newValue));
   };
 
+  // Only render auto toggle if auto-adjust should be enabled
+  const manualOnly = manualOnlySettings.includes(props.autoSetting);
+  const autoToggle = manualOnly ? undefined : (
+    <SettingAutoToggle setting={props.autoSetting} size={autoToggleSize} />
+  );
+
+  let sliderContainerStyle = { ...styles.sliderContainer };
+  if (manualOnly) Object.assign(sliderContainerStyle, styles.sliderContainerAutoDisabled);
   const slider = (expanded && range) ? (
-    <View style={styles.sliderContainer}>
+    <View style={sliderContainerStyle}>
       <View style={styles.slider}>
         <Slider value={value} range={range} onChange={handleSliderChange} logarithmic={props.logarithmic} />
       </View>
       <View style={styles.autoToggle}>
-        <SettingAutoToggle setting={props.autoSetting} size={autoToggleSize} />
+        {autoToggle}
       </View>
     </View>
   ) : null;
 
   const nameText = props.name ? (
-    <Typography style={styles.nameText} variant="bodySmall" color="white">
+    <Typography style={styles.nameText} variant="bodySmall" color={color}>
       {props.name}
     </Typography>
   ) : undefined;
 
   return (
-    <AnimatedPressable style={touchableStyle} onPress={handleButtonPress}>
+    <AnimatedPressable style={touchableStyle} onPress={handleButtonPress} disabled={disabled}>
       {nameText}
-      {props.icon}
-      <Typography variant="bodySmall" color="white">
+      {icon}
+      <Typography variant="bodySmall" color={color}>
         {formatValue(value, props.unit, isAuto, props.formattedMultiplier)}
       </Typography>
       {slider}
