@@ -37,6 +37,7 @@ interface CameraSettingsState {
   zoom: number,
 }
 
+export const resetAllSettings = createAction('settings/reset');
 export const setAutoExposure = createAction<boolean>('settings/autoExposure/set');
 export const setAutoFocus = createAction<boolean>('settings/autoFocus/set');
 export const setFocusDistance = createAction<number>('settings/focusDistance/set');
@@ -46,19 +47,22 @@ export const setAutoWhiteBalance = createAction<boolean>('settings/autoWhiteBala
 export const setWhiteBalance = createAction<number>('settings/whiteBalance/set');
 export const setZoom = createAction<number>('settings/zoom/set');
 
-const initialState: CameraSettingsState = {
-  autoFocus: true,
-  focusDistance: 0,
-  autoExposure: true,
-  ISO: 4500,
-  exposureTime: 10000000,
-  autoWhiteBalance: true,
-  whiteBalance: 0.5,
-  zoom: 0,
-};
+function generateInitialState(): CameraSettingsState {
+  return {
+    autoFocus: true,
+    focusDistance: 0,
+    autoExposure: true,
+    ISO: 4500,
+    exposureTime: 10000000,
+    autoWhiteBalance: true,
+    whiteBalance: 0.5,
+    zoom: 0,
+  };
+}
 
-export const cameraSettingsReducer = createReducer(initialState, (builder) => {
+export const cameraSettingsReducer = createReducer(generateInitialState, (builder) => {
   builder
+    .addCase(resetAllSettings, () => generateInitialState())
     .addCase(setAutoFocus, (state, action) => {
       CameraModule.setAutoFocus(action.payload);
       state.autoFocus = action.payload;

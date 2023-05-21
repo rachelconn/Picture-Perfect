@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import ShutterButton from './ShutterButton';
 import SettingButton, { AdjustableCameraSetting }  from './SettingButton/SettingButton';
-import { CameraSetting, captureImage } from '../../redux/cameraSettings';
+import { CameraSetting, captureImage, resetAllSettings } from '../../redux/cameraSettings';
 import Camera from './Camera';
 import { CameraPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
@@ -44,7 +44,7 @@ const CameraPage: React.FC = () => {
   const autoOnlySettings = autoOnlySettingsForLesson[lesson];
 
   const [hasCameraPermission, setHasCameraPermission] = React.useState<Boolean>();
-  const [allManualSettingsUpdated, setAllManualSettingsUpdated] = React.useState(false);
+  const [initialized, setInitialized] = React.useState(false);
   const { setImageURI } = useContext(NavigationContext);
 
   React.useEffect(() => {
@@ -59,7 +59,13 @@ const CameraPage: React.FC = () => {
       const isAuto = !manualOnlySettings.includes(setting);
       dispatch(autoSettingProps[setting].setter(isAuto));
     });
-    setAllManualSettingsUpdated(true);
+
+    setInitialized(true);
+
+    // On unmount, reset settings as the new camera view will have newly initialized settings
+    return () => {
+      dispatch(resetAllSettings());
+    };
   }, []);
 
   const settingButtons = adjustableSettings.map((setting) => (
@@ -73,7 +79,7 @@ const CameraPage: React.FC = () => {
     });
   };
 
-  if (hasCameraPermission === undefined || !allManualSettingsUpdated) return <View style={styles.background} />;
+  if (hasCameraPermission === undefined || !initialized) return <View style={styles.background} />;
   else if (hasCameraPermission === false) return <Typography color="black" variant="bodyLarge">Camera permission denied.</Typography>;
   return (
     <View style={styles.background}>
