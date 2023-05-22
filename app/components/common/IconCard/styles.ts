@@ -4,7 +4,6 @@ export const windowSize = Dimensions.get('window');
 
 export default StyleSheet.create({
   cardContainer: {
-    // TODO: height might need to change to accomodate content
     backgroundColor: 'white',
     borderRadius: windowSize.width * 0.025,
     minHeight: windowSize.height * 0.15,

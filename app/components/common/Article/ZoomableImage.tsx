@@ -175,7 +175,6 @@ const ZoomableImage: React.FC<ZoomableImageProps> = (props) => {
     height: scaledImageHeight,
   }
 
-  // TODO: detect back press
   return (
     <View style={props.style} {...panResponder.panHandlers}>
       <Image style={imageStyle} source={props.source} />

@@ -21,7 +21,6 @@ const adjustableSettings: AdjustableCameraSetting[] = [
   CameraSetting.ISO,
 ];
 
-// TODO: make these actually work
 const manualOnlySettingsForLesson: Record<Lesson, AutoCameraSetting[]> = {
   [Lesson.Focus]: [CameraSetting.AutoFocus],
   [Lesson.Bokeh]: [CameraSetting.AutoFocus],
