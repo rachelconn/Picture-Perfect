@@ -15,6 +15,7 @@ interface SliderProps {
   value: number,
   range: [number, number],
   onChange: (value: number) => any,
+  disabled?: boolean,
   logarithmic?: boolean,
 };
 
@@ -25,6 +26,7 @@ const Slider: React.FC<SliderProps> = ({
   range,
   onChange: handleChange,
   style = {},
+  disabled = false,
   logarithmic = false,
 }) => {
   const [lower, upper] = range;
@@ -57,23 +59,26 @@ const Slider: React.FC<SliderProps> = ({
   // Respond to touch events
   const panResponder = React.useMemo(() => {
     const updateValueFromEvent = (e: GestureResponderEvent) => {
-        // Transform value to range [0, 1] depending on position of slider
-        const sliderProgress = clamp((e.nativeEvent.pageY - layout.y) / layout.height, 0, 1);
+      // Disable interaction when disabled
+      if (disabled) return;
 
-        // Transform to actual range [lower, upper]
-        let newValue;
-        // Logarithmic: find appropriate scale value
-        if (logarithmic) {
-          if (sliderProgress < 0.25) newValue = interpolate(sliderProgress * 4, inputRange[0], inputRange[1]);
-          else if (sliderProgress < 0.5) newValue = interpolate((sliderProgress - 0.25) * 4, inputRange[1], inputRange[2]);
-          else if (sliderProgress < 0.75) newValue = interpolate((sliderProgress - 0.5) * 4, inputRange[2], inputRange[3]);
-          else newValue = interpolate((sliderProgress - 0.75) * 4, inputRange[3], inputRange[4]);
-        }
-        //Non-logarithmic: interpolate directly
-        else newValue = interpolate(sliderProgress, lower, upper);
+      // Transform value to range [0, 1] depending on position of slider
+      const sliderProgress = clamp((e.nativeEvent.pageY - layout.y) / layout.height, 0, 1);
 
-        value.setValue(newValue);
-        handleChange(newValue);
+      // Transform to actual range [lower, upper]
+      let newValue;
+      // Logarithmic: find appropriate scale value
+      if (logarithmic) {
+        if (sliderProgress < 0.25) newValue = interpolate(sliderProgress * 4, inputRange[0], inputRange[1]);
+        else if (sliderProgress < 0.5) newValue = interpolate((sliderProgress - 0.25) * 4, inputRange[1], inputRange[2]);
+        else if (sliderProgress < 0.75) newValue = interpolate((sliderProgress - 0.5) * 4, inputRange[2], inputRange[3]);
+        else newValue = interpolate((sliderProgress - 0.75) * 4, inputRange[3], inputRange[4]);
+      }
+      //Non-logarithmic: interpolate directly
+      else newValue = interpolate(sliderProgress, lower, upper);
+
+      value.setValue(newValue);
+      handleChange(newValue);
     };
     return PanResponder.create({
       onPanResponderGrant: (e) => {
@@ -85,7 +90,7 @@ const Slider: React.FC<SliderProps> = ({
         updateValueFromEvent(e);
       }
     });
-  }, [sliderElementInfo]);
+  }, [disabled, sliderElementInfo]);
 
   // Create slider knob that gives feedback when pressed and moves with touch
   let slider = undefined;
@@ -95,20 +100,35 @@ const Slider: React.FC<SliderProps> = ({
         outputRange,
         extrapolate: "clamp",
     });
-    const sliderKnobStyle = {
+
+    const sliderKnobOuterStyle = {
       ...styles.sliderKnobOuter,
       ...(pressed ? styles.sliderPressed : {}),
+      ...(disabled ? styles.sliderKnobOuterDisabled : {}),
       left: sliderFilledWidth,
+    };
+    const sliderKnobInnerStyle = {
+      ...styles.sliderKnobInner,
+      ...(disabled ? styles.sliderKnobInnerDisabled : {}),
+    };
+    const sliderBarFilledStyle = {
+      ...styles.sliderBarFilled,
+      ...(disabled ? styles.sliderBarFilledDisabled : {}),
+      width: sliderFilledWidth,
+    };
+    const sliderBarUnfilledStyle = {
+      ...styles.sliderBarUnfilled,
+      ...(disabled ? styles.sliderBarUnfilledDisabled : {}),
     };
 
     slider = (
       <>
         <View style={styles.sliderBarContainer}>
-          <Animated.View style={{ ...styles.sliderBarFilled, width: sliderFilledWidth }} />
-          <View style={{ ...styles.sliderBarUnfilled }} />
+          <Animated.View style={sliderBarFilledStyle} />
+          <View style={sliderBarUnfilledStyle} />
         </View>
-        <Animated.View style={sliderKnobStyle} pointerEvents="none">
-          <View style={styles.sliderKnobInner} />
+        <Animated.View style={sliderKnobOuterStyle} pointerEvents="none">
+          <View style={sliderKnobInnerStyle} />
         </Animated.View>
       </>
     );

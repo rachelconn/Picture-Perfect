@@ -153,7 +153,13 @@ const SettingButton: React.FC<SettingButtonProps> = ({ setting, autoOnlySettings
   const slider = (expanded && range) ? (
     <View style={sliderContainerStyle}>
       <View style={styles.slider}>
-        <Slider value={value} range={range} onChange={handleSliderChange} logarithmic={props.logarithmic} />
+        <Slider
+          value={value}
+          range={range}
+          onChange={handleSliderChange}
+          logarithmic={props.logarithmic}
+          disabled={isAuto}
+        />
       </View>
       <View style={styles.autoToggle}>
         {autoToggle}

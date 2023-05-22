@@ -25,11 +25,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     transform: [{ translateX: -innerRadius / 2 }],
   },
+  sliderKnobOuterDisabled: {
+    backgroundColor: '#444',
+  },
   sliderKnobInner: {
     backgroundColor: 'white',
     width: innerRadius,
     height: innerRadius,
     borderRadius: innerRadius / 2,
+  },
+  sliderKnobInnerDisabled: {
+    backgroundColor: '#666',
   },
   sliderPressed: {
     opacity: 0.8,
@@ -42,9 +48,15 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     height: sliderBarHeight,
   },
+  sliderBarFilledDisabled: {
+    backgroundColor: 'gray',
+  },
   sliderBarUnfilled: {
-    backgroundColor: 'lightgray',
+    backgroundColor: 'darkgray',
     height: sliderBarHeight,
     flex: 1,
+  },
+  sliderBarUnfilledDisabled: {
+    backgroundColor: '#444'
   },
 });
