@@ -65,9 +65,9 @@ const ExposureLesson: React.FC = () => {
         Overall, the process of creating a properly exposed photo will look something like this:
       </Article.Paragraph>
       <Article.NumberedList>
-        <Article.ListItem>Determine an initial exposure time based on the movement of your subject and background</Article.ListItem>
-        <Article.ListItem>Adjust ISO to a value that leads to proper exposure with your chosen exposure time</Article.ListItem>
-        <Article.ListItem>Take a photo, adjusting the appropriate setting if there's digital noise or smearing</Article.ListItem>
+        <Article.ListItem>Determine an intial ISO value based on the movement of you subject and background: if objects are slow or stationary, try a low value between 100-500. For fast-moving objects, you might need to raise the ISO to 1000 or more.</Article.ListItem>
+        <Article.ListItem>Adjust the exposure time to create a properly exposed image. Feel free to adjust your ISO if necessary!</Article.ListItem>
+        <Article.ListItem>Take a photo, adjusting the appropriate setting if there's digital noise or smearing.</Article.ListItem>
       </Article.NumberedList>
       <Article.SectionHeader>Your Task</Article.SectionHeader>
       <Article.Paragraph>
