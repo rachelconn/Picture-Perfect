@@ -22,7 +22,10 @@ import android.view.Surface;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.lang.InterruptedException;
+import java.lang.NullPointerException;
 import java.lang.StringBuilder;
+import java.lang.Thread;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -161,16 +164,27 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	// (potential) TODO: seems to work fine, but I have concerns about asynchronous writes, null values, and error handling
 	public void updateSettings(Map<CaptureRequest.Key, Object> settings) {
 		// Update corresponding settings
-		for (Map.Entry<CaptureRequest.Key, Object> setting : settings.entrySet()) {
-			captureRequestBuilder.set(setting.getKey(), setting.getValue());
-		}
-
-		// Rebuild and resend request
 		try {
-			captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, cameraHandler);
+			for (Map.Entry<CaptureRequest.Key, Object> setting : settings.entrySet()) {
+				captureRequestBuilder.set(setting.getKey(), setting.getValue());
+			}
+
+			// Rebuild and resend request
+			try {
+				captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, cameraHandler);
+			}
+			catch (CameraAccessException e) {
+				e.printStackTrace();
+			}
 		}
-		catch (CameraAccessException e) {
-			e.printStackTrace();
+		catch (NullPointerException e) {
+			// If captureRequestBuilder is undefined, wait and try again as camera is still initializing
+			try {
+				Thread.sleep(100);
+				updateSettings(settings);
+			}
+			catch (InterruptedException ie) {}
+			return;
 		}
 	}
 

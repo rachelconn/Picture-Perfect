@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import ShutterButton from './ShutterButton';
 import SettingButton, { AdjustableCameraSetting }  from './SettingButton/SettingButton';
-import { CameraSetting, captureImage, resetAllSettings } from '../../redux/cameraSettings';
+import { CameraSetting, captureImage, resetAllSettings, setFocusDistance } from '../../redux/cameraSettings';
 import Camera from './Camera';
 import { CameraPageNavigationProp } from '../common/NavigationStack/NavigationStack';
 import FocusAwareStatusBar from '../common/FocusAwareStatusBar/FocusAwareStatusBar';
@@ -57,6 +57,8 @@ const CameraPage: React.FC = () => {
     autoCameraSettings.forEach((setting) => {
       const isAuto = !manualOnlySettings.includes(setting);
       dispatch(autoSettingProps[setting].setter(isAuto));
+      // Need to manually set a focus distance after setting focus to auto for the setting change to reflect
+      if (!isAuto && setting === CameraSetting.AutoFocus) dispatch(setFocusDistance(0));
     });
 
     setInitialized(true);
