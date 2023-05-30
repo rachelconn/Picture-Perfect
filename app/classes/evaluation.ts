@@ -41,8 +41,8 @@ export const LessonEvaluationCriteria: Record<Lesson, EvaluationCriteria[]> = {
     EvaluationCriteria.Noise,
   ],
   [Lesson.Bokeh]: [
-    EvaluationCriteria.Blur,
     EvaluationCriteria.Bokeh,
+    EvaluationCriteria.Blur,
     EvaluationCriteria.Focus,
   ],
 };

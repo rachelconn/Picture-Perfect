@@ -12,6 +12,7 @@ import PageWithAppbar from '../common/PageWithAppbar/PageWithAppbar';
 import Typography from '../common/Typography/Typography';
 import EvaluationCard from './EvaluationCard';
 import styles from './styles';
+import PhotoDisplay from './PhotoDisplay';
 
 const defaultCriteria: EvaluationCriteria[] = [
   EvaluationCriteria.Exposure,
@@ -53,6 +54,12 @@ const EvaluationPage: React.FC = () => {
       allEvaluationsGood = allEvaluationsGood && evaluation.feedback.isGood;
       return <EvaluationCard evaluation={evaluation} key={evaluation.criteria} />
     });
+
+    // If focus evaluation card isn't present, display user's photo
+    if (!evaluations.some((evaluation) => evaluation.criteria === EvaluationCriteria.Focus)) {
+      evaluationCards.push(<PhotoDisplay />);
+    }
+
 
     // Create navigation buttons
     const handleContinueButtonPress = () => {

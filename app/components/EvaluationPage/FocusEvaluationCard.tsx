@@ -11,13 +11,17 @@ interface FocusEvaluationCardProps {
   evaluation: Evaluation,
 };
 
-const photoDimensions = { width: 4000, height: 3000 };
+export const photoDimensions = { width: 4000, height: 3000 };
+
+export function imageToSource(imageURI: string): string {
+  return `data:image/jpeg;base64,${imageURI.replace(/_/g, '/').replace(/-/g, '+')}`;
+}
 
 const FocusEvaluationCard: React.FC<FocusEvaluationCardProps> = ({ evaluation }) => {
   const { imageURI } = React.useContext(NavigationContext);
 
-  const imageBase64 = `data:image/jpeg;base64,${imageURI.replace(/_/g, '/').replace(/-/g, '+')}`
-  const focusBase64 = `data:image/png;base64,${evaluation.rawValues.focus}`
+  const imageBase64 = imageToSource(imageURI);
+  const focusBase64 = `data:image/png;base64,${evaluation.rawValues.focus}`;
 
   return (
     <CardBase>
