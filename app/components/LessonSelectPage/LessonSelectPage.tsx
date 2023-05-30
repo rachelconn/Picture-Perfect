@@ -32,6 +32,8 @@ const lessons: Record<Lesson, LessonProperties> = {
   },
 };
 
+const completeColor = '#009412';
+
 const LessonSelectPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<LessonSelectPageNavigationProp>();
@@ -64,14 +66,16 @@ const LessonSelectPage: React.FC = () => {
     };
 
     const lessonCompleted = lessonStatus[lesson]?.completed;
+    const titleColor = lessonCompleted ? completeColor : 'black';
     const titleIconProps = lessonCompleted ? {
       titleIcon: 'check-circle-outline',
-      titleIconColor: '#009412',
+      titleIconColor: completeColor,
     } : {};
 
     return (
       <IconCard
         title={title}
+        titleColor={titleColor}
         description={props.description}
         icon={props.icon}
         onPress={handlePress}
@@ -82,7 +86,7 @@ const LessonSelectPage: React.FC = () => {
   });
 
   return (
-    <PageWithAppbar title="Lessons">
+    <PageWithAppbar title="Lessons" hasMenu>
       {lessonCards}
     </PageWithAppbar>
   );
