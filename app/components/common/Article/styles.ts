@@ -12,13 +12,13 @@ export default StyleSheet.create({
     paddingTop: windowSize.width * 0.03,
   },
   paragraph: {
-    marginLeft: windowSize.width * 0.02,
-    marginRight: windowSize.width * 0.02,
+    marginLeft: windowSize.width * 0.01,
+    marginRight: windowSize.width * 0.01,
   },
   list: {
     marginTop: windowSize.width * 0.025,
     marginBottom: windowSize.width * 0.025,
-    marginLeft: windowSize.width * 0.1,
+    marginLeft: windowSize.width * 0.01,
     marginRight: windowSize.width * 0.1,
   },
   listItemContainer: {
