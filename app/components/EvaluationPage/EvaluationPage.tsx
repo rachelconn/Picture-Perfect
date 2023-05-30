@@ -57,7 +57,7 @@ const EvaluationPage: React.FC = () => {
 
     // If focus evaluation card isn't present, display user's photo
     if (!evaluations.some((evaluation) => evaluation.criteria === EvaluationCriteria.Focus)) {
-      evaluationCards.push(<PhotoDisplay />);
+      evaluationCards.push(<PhotoDisplay key="photo" />);
     }
 
 
