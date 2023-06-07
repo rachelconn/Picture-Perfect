@@ -2,6 +2,7 @@ import React from 'react';
 import { Evaluation, EvaluationCriteria } from '../../classes/evaluation';
 import IconCard from '../common/IconCard/IconCard';
 import FocusEvaluationCard from './FocusEvaluationCard';
+import ExposureMeter from './ExposureMeter';
 
 interface EvaluationCardProps {
   evaluation: Evaluation,
@@ -21,19 +22,18 @@ const EvaluationCard: React.FC<EvaluationCardProps> = ({ evaluation }) => {
     return <FocusEvaluationCard evaluation={evaluation} />;
   }
 
-  // Generate title based on criteria
-  // TODO: show value as necessary
   let title = evaluation.name;
-  if (evaluation.criteria === EvaluationCriteria.Exposure) {
-    let formattedExposure = evaluation.rawValues.exposure.toFixed(1);
-    if (formattedExposure[0] !== '-') formattedExposure = `+${formattedExposure}`;
-    title = title.concat(`: ${formattedExposure}`)
-  }
+
+  // Add exposure meter display for exposure card
+  const content = evaluation.criteria === EvaluationCriteria.Exposure ? (
+    <ExposureMeter value={evaluation.rawValues.exposure} />
+  ) : undefined;
 
   return (
     <IconCard
       title={title}
       titleColor={evaluation.feedback.isGood ? 'black' : '#ed4337'}
+      content={content}
       description={evaluation.feedback.comment}
       icon={icon[evaluation.criteria]}
     />

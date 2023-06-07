@@ -9,6 +9,7 @@ export interface IconCardProps {
   title: string,
   description: string,
   icon: string,
+  content?: JSX.Element,
   titleColor?: string,
   titleIcon?: string,
   titleIconColor?: string,
@@ -21,6 +22,7 @@ const IconCard: React.FC<IconCardProps> = ({
   title,
   description,
   icon,
+  content,
   titleColor,
   titleIcon,
   titleIconColor,
@@ -41,6 +43,7 @@ const IconCard: React.FC<IconCardProps> = ({
             {titleIconComponent}
             <Typography variant="title" color={titleColor}>{title}</Typography>
           </View>
+          {content}
           <Typography variant="bodyMedium">{description}</Typography>
         </View>
       </View>
