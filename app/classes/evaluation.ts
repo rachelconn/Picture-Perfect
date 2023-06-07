@@ -77,7 +77,13 @@ function getExposureFeedback({ exposure }: BackendPhotoEvaluation, lesson: Lesso
 }
 
 const blurLessons = new Set<Lesson>([Lesson.Focus, Lesson.Bokeh]);
-function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
+function getBlurTypeFeedback({ blurType, percentInFocus }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
+  if (blurType === BlurType.Sharp || percentInFocus > 80) {
+    return {
+      comment: "Your photo doesn't seem to have motion blur, and the focus is clear and sharp. Great job!",
+      isGood: true,
+    };
+  }
   if (blurType === BlurType.MotionBlur) {
     return {
       comment: 'Your photo seems to suffer from motion blur. Try keeping your camera steady with techniques like controlling your breathing, placing your camera on a stable surface, or keeping your elbows tucked into your body.',
@@ -99,12 +105,6 @@ function getBlurTypeFeedback({ blurType }: BackendPhotoEvaluation, lesson: Lesso
       };
     }
   }
-  if (blurType === BlurType.Sharp) {
-    return {
-      comment: "Your photo doesn't seem to have motion blur, and the focus is clear and sharp. Great job!",
-      isGood: true,
-    };
-  }
   throw Error(`Undefined blur type: ${blurType}. Make sure the API output is correct.`);
 }
 
@@ -115,13 +115,13 @@ function getBokehFeedback(evaluations: BackendPhotoEvaluation, lesson: Lesson): 
       isGood: true,
     };
   }
-  if (evaluations.percentInFocus > 70) {
+  if (evaluations.percentInFocus > 65) {
     return {
       comment: 'Too much of the image is in focus for a striking bokeh effect. Try using some of the tips you learned in the lesson to make it so more of the background is blurred.',
       isGood: false,
     };
   }
-  if (evaluations.percentInFocus < 20) {
+  if (evaluations.percentInFocus < 30) {
     return {
       comment: "Most of the image seems to be out of focus. It might help to use forced perspective to get your subject far away from the background, then adjusting your focal length so that the subject is sharp but the background is blurry.",
       isGood: false,
@@ -139,7 +139,7 @@ function getNoiseFeedback(evaluations: BackendPhotoEvaluation, lesson: Lesson): 
     };
   }
   return {
-    comment: 'Your image is free of noise artifacts. Good job balancing ISO and exposure time!',
+    comment: 'Your image is free of noise artifacts. Good job adjusting your ISO value!',
     isGood: true,
   };
 }
