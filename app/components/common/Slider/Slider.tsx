@@ -59,9 +59,6 @@ const Slider: React.FC<SliderProps> = ({
   // Respond to touch events
   const panResponder = React.useMemo(() => {
     const updateValueFromEvent = (e: GestureResponderEvent) => {
-      // Disable interaction when disabled
-      if (disabled) return;
-
       // Transform value to range [0, 1] depending on position of slider
       const sliderProgress = clamp((e.nativeEvent.pageY - layout.y) / layout.height, 0, 1);
 
