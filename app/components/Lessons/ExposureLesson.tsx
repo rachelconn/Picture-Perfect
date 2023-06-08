@@ -65,10 +65,20 @@ const ExposureLesson: React.FC = () => {
         Overall, the process of creating a properly exposed photo will look something like this:
       </Article.Paragraph>
       <Article.NumberedList>
-        <Article.ListItem>Determine an intial ISO value based on the movement of you subject and background: if objects are slow or stationary, try a low value between 100-500. For fast-moving objects, you might need to raise the ISO to 1000 or more.</Article.ListItem>
+        <Article.ListItem>Determine an intial ISO value based on the movement of your subject and background: if objects are slow or stationary, try a low value between 100-500. For fast-moving objects, you might need to raise the ISO to 1000 or more.</Article.ListItem>
         <Article.ListItem>Adjust the exposure time to create a properly exposed image. Feel free to adjust your ISO if necessary!</Article.ListItem>
         <Article.ListItem>Take a photo, adjusting the appropriate setting if there's digital noise or smearing.</Article.ListItem>
       </Article.NumberedList>
+      <Article.SectionHeader>Measuring Exposure</Article.SectionHeader>
+      <Article.Paragraph>
+        In order to evaluate the exposure of photos,
+        photographers often measure exposure in terms of "stops".
+        One stop corresponds to halving or doubling the amount of light in a photo,
+        and an exposure value of 0 means that a photo has just the right amount of exposure.
+        This means that a photo with an exposure value of -1 is underexposed and should be about twice as bright,
+        while a photo with an exposure value of +1 is overexposed by a single stop and should be roughly half as bright.
+        Try thinking about this when looking at your photo evaluations and adjust accordingly!
+      </Article.Paragraph>
       <Article.SectionHeader>Your Task</Article.SectionHeader>
       <Article.Paragraph>
         Now that you know what settings are responsible for adjusting exposure and what proper exposure look like,
