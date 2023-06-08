@@ -39,7 +39,7 @@ const LowLightPhotographyLesson: React.FC = () => {
         and be more conservative with the ISO you use.
         Finding this balance can be difficult,
         as longer exposure times can lead to motion blur due to moving the camera during the exposure.
-        Consider taking steps to keep your camera steady and keep your photos sharp.
+        Consider taking some of these steps to keep your camera steady and keep your photos sharp.
       </Article.Paragraph>
       <Article.SectionHeader>Steadying Your Camera</Article.SectionHeader>
       <Article.Paragraph>
