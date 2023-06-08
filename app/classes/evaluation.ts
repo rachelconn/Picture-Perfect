@@ -18,6 +18,7 @@ export enum BlurType {
 // Raw evaluation numbers from the backend
 export interface BackendPhotoEvaluation {
   blurType: BlurType,
+  blurTypeLogits: [number, number, number],
   bokeh: number,
   exposure: number,
   focus: string,
@@ -77,16 +78,27 @@ function getExposureFeedback({ exposure }: BackendPhotoEvaluation, lesson: Lesso
 }
 
 const blurLessons = new Set<Lesson>([Lesson.Focus, Lesson.Bokeh]);
-function getBlurTypeFeedback({ blurType, percentInFocus }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
-  if (blurType === BlurType.Sharp || percentInFocus > 80) {
+function getBlurTypeFeedback({ blurType, blurTypeLogits, percentInFocus }: BackendPhotoEvaluation, lesson: Lesson): EvaluationFeedback {
+  /* Evaluate as sharp in the following situations:
+   * - When the blur type model recognizes the image is sharp
+   * - When >=80% of the image is in focus (to make detection more robust)
+   * - When completing the low-light lesson and the blur type model gives p>=0.25 that the image is sharp (to make the blur evaluation more forgiving as the lesson is difficult)
+   */
+  if (
+    blurType === BlurType.Sharp
+    || percentInFocus >= 80
+    || (lesson === Lesson.LowLight && blurTypeLogits[BlurType.Sharp] >= 0.25)
+  ) {
     return {
       comment: "Your photo doesn't seem to have motion blur, and the focus is clear and sharp. Great job!",
       isGood: true,
     };
   }
   if (blurType === BlurType.MotionBlur) {
+    let comment =  'Your photo seems to suffer from motion blur. Try keeping your camera steady with techniques like controlling your breathing, placing your camera on a stable surface, or keeping your elbows tucked into your body.';
+    if (lesson === Lesson.LowLight) comment += ' You might also want to make sure your focus is correctly adjusted, as this could create even more blur!';
     return {
-      comment: 'Your photo seems to suffer from motion blur. Try keeping your camera steady with techniques like controlling your breathing, placing your camera on a stable surface, or keeping your elbows tucked into your body.',
+      comment,
       isGood: false,
     };
   }
